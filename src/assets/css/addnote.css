@@ -1,0 +1,104 @@
+body {font-family: Arial, Helvetica, sans-serif;}
+*{
+  color: white;
+}
+h1{
+    font-size: 40px;
+    display: block;
+    margin-top: 30px;
+}
+
+input, #select-subject, #select-semester{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background-color: #323233;
+}
+input:focus{
+    outline: none;
+}
+
+.modal button {
+  background-color: #616264;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.modal button:hover {
+  opacity: 0.6;
+}
+
+.imgcontainer {
+  text-align: center;
+  width: 100%;
+}
+
+img.avatar {
+  width: 25%;
+}
+
+.container {
+  padding: 25px;
+}
+
+span.psw {
+  margin-top: -5px;
+  float: right;
+}
+
+.psw a{
+  padding-top: 10px;
+  color: #9b9b9b;
+}
+optgroup{
+  color: #bebebe;
+}
+.modal {
+  display: block; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 32px;
+  width: 100%; 
+  height: calc(100vh - 32px); 
+  overflow: auto;
+  background-color: rgba(61, 61, 61, 0);
+  padding-top: 10px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #333435;
+  margin: 100px auto 5% auto;
+  border: 1px solid rgb(39, 39, 39);
+  width: 50%; 
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+
+#login-response-false, #login-response-true{
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: rgb(201, 201, 201);
+    font-size: 15px;
+}
+
+#splitline{
+  padding-left: 0;
+  width: 100vw;
+  height: 1px;
+  background-color: #b9b9b9;
+}
