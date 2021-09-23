@@ -1,6 +1,8 @@
 <?php
 include "config.php";
 
+$loginfailed = false;
+
 if (isset($_GET["logout"])) {
   setcookie("sessionid", time() - 3600);
   setcookie("sessionkey", time() - 3600);
@@ -21,8 +23,9 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
     setcookie("sessionid", $user->username . $_SERVER["REMOTE_ADDR"]);
     setcookie("sessionkey", $user->id);
     header("Location: " . $rootpath . "assets/sites/home.php");
+    $loginfailed = false;
   } else {
-    $login = false;
+    $loginfailed = true;
   }
 }
 
@@ -35,7 +38,7 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
   <link rel="stylesheet" href="<?php echo $rootpath ?>assets/css/login.css" type="text/css">
   <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath ?>assets/img/icon.ico">
   <script src="<?php echo $rootpath ?>assets/js/jquery.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.9.0/js/all.js" data-auto-replace-svg></script>
+  <script src="<?php echo $rootpath ?>assets/js/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProMarks - Login</title>
 </head>
@@ -55,18 +58,14 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
         <input type="password" placeholder="Passwort eingeben" name="psw" required>
 
         <button type="submit" name="login">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" id="remember"> Angemeldet bleiben
-        </label>
 
-        <a style="float: right; color: rgb(103, 103, 216); cursor: pointer;" href="<?php echo $rootpath ?>assets/sites/register.php">Registrieren</a>
-
-        <p style='background-color: red;display: none;' id='login-response-false'>Login failed</p>
-
+        <?php if ($loginfailed) { ?>
+          <p style='background-color: red;' id='login-response-false'>Login failed</p>
+        <?php } ?>
       </div>
 
       <div class="container" style="background-color:#404142">
-        <span class="psw"><a href="mailto:gubler.florian@gmx.net">Passwort vergessen</a></span>
+        <span class="psw"><a style="color: rgb(103, 103, 216); cursor: pointer;" href="<?php echo $rootpath ?>assets/sites/register.php">Registrieren</a></span>
       </div>
     </form>
   </div>

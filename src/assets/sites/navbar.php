@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=UTF-8');
+
 include "../../config.php";
 $login = false;
 
@@ -18,7 +20,7 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 <html lang="de">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
     <link src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.css" rel="stylesheet" />
@@ -27,7 +29,7 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 
     <link rel="shortcut icon" type="image/x-icon" href="../img/icon.ico">
 
-    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg></script>
+    <script src="<?php echo $rootpath ?>assets/js/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
     <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/copy.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>

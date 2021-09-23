@@ -39,7 +39,7 @@ function getNotes($userid)
         array_push($notes, new Note($row['id'], $row['value'], $row['examName'], $row['FK_subject'], $row['FK_user'], $row['FK_school'], $row['FK_semester'], $row['additionalTag'], $row['schoolName'], $row['semesterTag'], $row['subjectName']));
     }
 
-    return json_encode($notes);
+    return $notes;
 }
 function getSemesters()
 {
@@ -53,7 +53,7 @@ function getSemesters()
         array_push($semesters, new Semester($row["id"], $row["semesterTag"]));
     }
 
-    return json_encode($semesters);
+    return $semesters;
 }
 function getSchools()
 {
@@ -67,7 +67,7 @@ function getSchools()
         array_push($schools, new School($row["id"], $row["schoolName"]));
     }
 
-    return json_encode($schools);
+    return $schools;
 }
 function getSubjects()
 {
@@ -80,7 +80,7 @@ function getSubjects()
         array_push($subjects, new Subject($row["id"], $row["FK_school"], $row["additionalTag"], $row["schoolName"], $row["subjectName"]));
     }
 
-    return json_encode($subjects);
+    return $subjects;
 }
 
 function DeleteStickyNotes($userid)
@@ -108,7 +108,7 @@ function GetShareLink($userid)
     $returnvalue->link = $link;
     $returnvalue->token = $token;
 
-    return json_encode($returnvalue);
+    return $returnvalue;
 }
 
 function getStickyNotes($userid)
@@ -296,6 +296,5 @@ function AdminTools_GetUserList()
     while ($user = $qry->fetch_assoc()) {
         array_push($users, new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin']));
     }
-
     return $users;
 }
