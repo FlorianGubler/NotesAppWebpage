@@ -51,15 +51,15 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
             </svg></a>
         <div id="nav-user">
             <img id="profile-pic" src="<?php echo $rootpath; ?>assets/img/profilepictures/<?php echo $user->profilepicture; ?>" alt="Profile Picture" draggable="false">
-            <a href="configuser.html" id="menu-user" class="use-user-name"></a>
+            <a href="<?php echo $rootpath; ?>assets/sites/configuser.php" id="menu-user" class="use-user-name"><?php echo $user->username; ?></a>
         </div>
         <div id="menu-splitline"></div>
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a id="bms-anchor" href="bms.php"><i class="fas fa-school"></i> BMS Notenstand</a></li>
-            <li><a id="lap-anchor" href="lap.php"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
+            <li><a id="bms-anchor" href="bms.php#bms_abschlussnoten"><i class="fas fa-school"></i> BMS Notenstand</a></li>
+            <li><a id="lap-anchor" href="lap.php#BerufsfachschuleModule"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
-            <li><a id="addnote-anchor" href="notes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
+            <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
             <?php
             if ($user->admin == true) {
             ?>

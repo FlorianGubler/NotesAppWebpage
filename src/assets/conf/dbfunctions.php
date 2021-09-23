@@ -187,14 +187,12 @@ function deleteStickyNote($PK_stickynote)
     }
 }
 
-function uploadNote($userid, $note)
+function uploadNote($note)
 {
     global $conn;
 
-    $userid = $conn->real_escape_string($userid);
-
     //Escape Notes attributes
-    $query = "INSERT INTO notes (value, examName, FK_subject, FK_user, FK_semester) VALUES (" . $note->value . ", '" . $note->examName . "', " . $note->FK_subject . ", " . $userid . ", " . $note->FK_semester . ");";
+    $query = "INSERT INTO notes (value, examName, FK_subject, FK_user, FK_semester) VALUES (" . $note->value . ", '" . $note->examName . "', " . $note->FK_subject . ", " . $note->FK_user . ", " . $note->FK_semester . ");";
 
     if (!$conn->query($query)) {
         http_response_code(406);

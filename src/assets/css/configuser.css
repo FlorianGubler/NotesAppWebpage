@@ -143,7 +143,7 @@ span.psw {
 .uploadpb-cropper-image-container{
   position: relative;
   margin: 10px;
-  height: 50vh;
+  width: 30vw;
 }
 
 .uploadpb-cropper-image-container canvas, .uploadpb-cropper-image-container img{
@@ -186,6 +186,14 @@ span.psw {
   color: white;
 }
 
+#pb-upload-hidden{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
 .edit-image-container{
   display: flex;
   flex-direction: row;

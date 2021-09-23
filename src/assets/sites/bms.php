@@ -24,7 +24,7 @@ foreach ($notes as $note) {
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/bms.css">
 <div id="top-bar-gui">
     <h1 id="title-home">BMS Notentabelle</h1>
-    <a href="<?php echo $rootpath; ?>addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
+    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
 </div>
 <ul id="semesters">
     <?php
@@ -61,7 +61,7 @@ foreach ($notes as $note) {
             $endnotessemester[$semester]['endnote'] += $endnotessemester[$semester][$subject];
             echo "</tr>";
         }
-        if(count($semesternotes) == 0){
+        if (count($semesternotes) == 0) {
             echo "<p class='not-notes-found'>Keine Noten gefunden</p>";
         }
         if (count($semesternotes) != 0) {
@@ -70,36 +70,36 @@ foreach ($notes as $note) {
         }
         echo "</table>";
     ?>
-            <div class="calculates">
-                <h2>Notenberechnung</h2>
-                <table class="table-notes-end">
-                    <?php
+        <div class="calculates">
+            <h2>Notenberechnung</h2>
+            <table class="table-notes-end">
+                <?php
 
-                    foreach ($endnotessemester[$semester] as $subject => $endnotesubject) {
-                        if ($subject != "endnote") {
-                            echo "<tr>";
-                            echo "<th>$subject</th>";
-                            if ($endnotesubject > 4) {
-                                $notestateclass = "grade-good";
-                            } else if ($endnotesubject < 4 && $note->value != 0) {
-                                $notestateclass = "grade-bad";
-                            }
-                            echo "<td class='$notestateclass'>$endnotesubject</td>";
-                            echo "</tr>";
+                foreach ($endnotessemester[$semester] as $subject => $endnotesubject) {
+                    if ($subject != "endnote") {
+                        echo "<tr>";
+                        echo "<th>$subject</th>";
+                        if ($endnotesubject > 4) {
+                            $notestateclass = "grade-good";
+                        } else if ($endnotesubject < 4 && $note->value != 0) {
+                            $notestateclass = "grade-bad";
                         }
+                        echo "<td class='$notestateclass'>$endnotesubject</td>";
+                        echo "</tr>";
                     }
-                    echo "<tr><div class='splitline'></div></tr>";
-                    $semesterendnote = $endnotessemester[$semester]["endnote"];
-                    $notestateclass = "";
-                    if ($endnotessemester[$semester]["endnote"] > 4) {
-                        $notestateclass = "grade-good";
-                    } else if ($endnotessemester[$semester]["endnote"] < 4 && $endnotessemester[$semester]["endnote"] != 0) {
-                        $notestateclass = "grade-bad";
-                    }
-                    echo "<tr><th>Endnote: </th><td class='$notestateclass'>$semesterendnote</td></tr>";
-                    ?>
-                </table>
-            </div>
+                }
+                echo "<tr><div class='splitline'></div></tr>";
+                $semesterendnote = $endnotessemester[$semester]["endnote"];
+                $notestateclass = "";
+                if ($endnotessemester[$semester]["endnote"] > 4) {
+                    $notestateclass = "grade-good";
+                } else if ($endnotessemester[$semester]["endnote"] < 4 && $endnotessemester[$semester]["endnote"] != 0) {
+                    $notestateclass = "grade-bad";
+                }
+                echo "<tr><th>Endnote: </th><td class='$notestateclass'>$semesterendnote</td></tr>";
+                ?>
+            </table>
+        </div>
     <?php
         echo "</div>";
     }
