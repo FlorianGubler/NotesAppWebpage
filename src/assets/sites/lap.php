@@ -53,11 +53,18 @@ foreach ($notes as $note) {
                             $notestateclass = "grade-bad";
                         }
                         echo "<td class='$notestateclass' title='$note->examName'>$note->value</td>";
+                        $endnotes[$currtag][$subject] += $note->value;
                     }
                     if (count($subjectnotes) != 0) {
+                        $endnotes[$currtag][$subject] /= count($subjectnotes);
+                        $endnotes[$currtag][$subject] = round($endnotes[$currtag][$subject] * 2) / 2;
                     }
                     $endnotes[$currtag]['endnote'] += $endnotes[$currtag][$subject];
                     echo "</tr>";
+                }
+                if (count($notesbytag[$currtag]) != 0) {
+                    $endnotes[$currtag]["endnote"] /= count($notesbytag[$currtag]);
+                    $endnotes[$currtag]["endnote"] = round($endnotes[$currtag]["endnote"] * 2) / 2;
                 }
                 ?>
             </table>
@@ -75,11 +82,18 @@ foreach ($notes as $note) {
                             $notestateclass = "grade-bad";
                         }
                         echo "<td class='$notestateclass' title='$note->examName'>$note->value</td>";
+                        $endnotes[$currtag][$subject] += $note->value;
                     }
                     if (count($subjectnotes) != 0) {
+                        $endnotes[$currtag][$subject] /= count($subjectnotes);
+                        $endnotes[$currtag][$subject] = round($endnotes[$currtag][$subject] * 2) / 2;
                     }
                     $endnotes[$currtag]['endnote'] += $endnotes[$currtag][$subject];
                     echo "</tr>";
+                }
+                if (count($notesbytag[$currtag]) != 0) {
+                    $endnotes[$currtag]["endnote"] /= count($notesbytag[$currtag]);
+                    $endnotes[$currtag]["endnote"] = round($endnotes[$currtag]["endnote"] * 2) / 2;
                 }
                 ?>
             </table>
@@ -88,7 +102,20 @@ foreach ($notes as $note) {
             <h2>Notenberechnung</h2>
             <table class="table-notes-end">
                 <?php
-
+                    $notestateclass = "";
+                    if ($endnotes["bs"]["endnote"] > 4) {
+                        $notestateclass = "grade-good";
+                    } else if ($endnotes["bs"]["endnote"] < 4 && $endnotes["bs"]["endnote"] != 0) {
+                        $notestateclass = "grade-bad";
+                    }
+                    echo "<tr><th>Endnote BS: </th><td class='$notestateclass'>".$endnotes["bs"]["endnote"] ."</td></tr>";
+                    $notestateclass = "";
+                    if ($endnotes["uek"]["endnote"] > 4) {
+                        $notestateclass = "grade-good";
+                    } else if ($endnotes["uek"]["endnote"] < 4 && $endnotes["uek"]["endnote"] != 0) {
+                        $notestateclass = "grade-bad";
+                    }
+                    echo "<tr><th>Endnote ÜK: </th><td class='$notestateclass'>".$endnotes["uek"]["endnote"] ."</td></tr>";
                 ?>
             </table>
         </div>

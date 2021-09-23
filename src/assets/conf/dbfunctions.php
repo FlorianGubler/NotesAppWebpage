@@ -204,9 +204,9 @@ function setUsername($user, $newusername, $password)
 {
     global $conn;
 
-    if ($user["passwordhash"] == hash("sha256", $user["email"] . $password)) {
+    if ($user["passwordhash"] == hash("sha256", $user->email . $password)) {
         $newusername = $conn->real_escape_string($newusername);
-        $query = "UPDATE users SET username='" . $newusername . "' WHERE id=" . $user["id"] . ";";
+        $query = "UPDATE users SET username='" . $newusername . "' WHERE id=" . $user->id . ";";
         $conn->query($query);
     } else {
         http_response_code(403);
@@ -217,11 +217,11 @@ function setEmail($user, $newemail, $password)
 {
     global $conn;
 
-    if ($user["passwordhash"] == hash("sha256", $user["email"] . $password)) {
+    if ($user["passwordhash"] == hash("sha256", $user->email . $password)) {
         $updatedPsw = hash("sha256", $newemail . $password);
 
         $newemail = $conn->real_escape_string($newemail);
-        $query = "UPDATE users SET email='" . $newemail . "', email_confirmed = 0, passwordhash='" . $updatedPsw . "' WHERE id=" . $user["id"] . ";";
+        $query = "UPDATE users SET email='" . $newemail . "', email_confirmed = 0, passwordhash='" . $updatedPsw . "' WHERE id=" . $user->id . ";";
 
         $conn->query($query);
 
@@ -242,16 +242,16 @@ function sendConfirmEmail($receiver)
     $headers .=  'X-Mailer: PHP/' . phpversion();
 
     if (!mail($receiver, $subject, $message, $headers)) {
-        http_response_code(409); // 409 - Conflict
+        return false;
     }
 }
 
 function setPassword($user, $oldpassword, $newpassword)
 {
     global $conn;
-    if ($user["passwordhash"] == hash("sha256", $user["email"] . $oldpassword)) {
-        $updatedPsw = hash("sha256", $user["email"] . $newpassword);
-        $query = "UPDATE users SET passwordhash='" . $updatedPsw . "' WHERE id=" . $user["id"] . ";";
+    if ($user["passwordhash"] == hash("sha256", $user->email . $oldpassword)) {
+        $updatedPsw = hash("sha256", $user->email . $newpassword);
+        $query = "UPDATE users SET passwordhash='" . $updatedPsw . "' WHERE id=" . $user->id . ";";
         $conn->query($query);
     } else {
         http_response_code(403);
@@ -295,4 +295,69 @@ function AdminTools_GetUserList()
         array_push($users, new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin']));
     }
     return $users;
+}
+function uploadPB($userid, $uploadpbfile, $uploadpbdata){
+    global $conn;
+    //generate Filename
+    $target_dir = "../../assets/profilepictures/";
+    $filecount = count(scandir($target_dir)) - 1;
+    file_put_contents("../loging.txt", $filecount);
+    $newfilename = "profilepicture_" . ($filecount) . "." . explode(".", $uploadpbfile["name"])[count(explode(".", $uploadpbfile["name"])) - 1];
+    $target_file = $target_dir . $newfilename;
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    $counter = 0;
+    while (file_exists($target_file)) {
+        $counter++;
+        $newfilename = "profilepicture_" . ($filecount + $counter) . "." . explode(".", $uploadpbfile["name"])[count(explode(".", $uploadpbfile["name"])) - 1];
+        $target_file = $target_dir . $newfilename;
+    }
+
+    // Check if image file is a actual image or fake image
+    $check = getimagesize($uploadpbfile["tmp_name"]);
+    if ($check !== false) {
+        $uploadOk = 1;
+    } else {
+        $uploadOk = 0;
+    }
+
+    // Allow certain file formats
+    if (
+        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif"
+    ) {
+        $uploadOk = 0;
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        return false;
+    } else {
+        if (move_uploaded_file($uploadpbfile["tmp_name"], $target_file)) {
+            do {
+                if (file_exists($target_file)) {
+                    break;
+                }
+            } while (true);
+
+            //Delete old File
+            $oldimg = $conn->query("SELECT profilepicture FROM users WHERE id=" . $userid . ";")->fetch_assoc()["profilepicture"];
+            if ($oldimg != "defaultpb.jpg" && file_exists($target_dir . $oldimg)) {
+                unlink($target_dir . $oldimg);
+            }
+
+            //Set New File
+            $conn->query("UPDATE users SET profilepicture='" . $newfilename . "' WHERE id=" . $userid . ";");
+
+            //Crop Image
+            $image_data = json_decode($uploadpbdata);
+            $source = imagecreatefromjpeg($target_file);
+            $im2 = imagecrop($source, ['x' => $image_data->x, 'y' => $image_data->y, 'width' => $image_data->width, 'height' => $image_data->height]);
+
+            imagejpeg($im2, $target_file);
+        } else {
+            return false;
+        }
+    }
 }

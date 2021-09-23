@@ -3,6 +3,6 @@
 $conn = new mysqli("localhost", "root", "", "notes");
 
 //$rootpath = "https://dekinotu.myhostpoint.ch/notes/";
-$rootpath = "\\";
+$rootpath = "\\notesWeb/src/";
 
 include "assets/conf/dbfunctions.php";

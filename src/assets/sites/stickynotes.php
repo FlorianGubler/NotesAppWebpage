@@ -1,45 +1,33 @@
-<div id="includedContent"></div>
-<div id="loading"></div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<?php
+    include "navbar.php";
+?>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
-<script src="assets/js/sleep.js"></script>
-<script>$.ajaxPrefilter(function (options, originalOptions, jqXHR) { options.async = true; });</script>
-
-<script>
-    $(function () {
-        $("#loading").load("loading.html");
-    });
-    $(function () {
-        $("#includedContent").load("navbar.html");
-    });
-</script>
-<link rel="stylesheet" href="assets/css/notes.css">
+<script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>
+<link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/stickynotes.css">
 <div class="content-title-bar-container">
     <div style="display: inherit;">
         <h1>Notizen</h1>
         <button id="list-notes-expand" onclick="epxandNotesList();"><i class="fas fa-chevron-down"></i></button>
     </div>
     <div style="display: inherit;" class="config-editor-container">
+        <button onclick="openCreateStickyNote();" class="create-stickyNote"><i class="fas fa-plus"></i></button>
         <div id="loading-container">
             <div class="loader"></div>
         </div>
         <button id="autosave-off-save-editor" onclick="saveStickyNote(this.name);">Speichern</button>
         <div class="set-autosave-container">
-            <input type="checkbox" id="set-autosave" onchange="set_autosave(this);" checked><label for="set-autosave">
-                Auto Save</label>
+            <input type="checkbox" id="set-autosave" onchange="set_autosave(this);" checked><label for="set-autosave">Auto Save</label>
         </div>
-        <button onclick="openCreateStickyNote();" class="create-stickyNote"><i
-                class="fab fa-creative-commons-share"></i></button>
     </div>
 </div>
 <div id="no-stickynotes-found">
     <div class="no-stickynotes-found-imgcontainer">
-        <img src="assets/img/nothing-found.png" alt="Nichts gefunden">
+        <img src="<?php echo $rootpath; ?>assets/img/nothing-found.png" alt="Nichts gefunden">
     </div>
     <p>Hier ist noch nichts. Klicke oben rechts um eine neue Notiz zu erstellen</p>
 </div>
@@ -78,13 +66,10 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 <script>
     let StickyNoteList_expanded = true;
     let current_editor;
     let autosave = true;
-
-    document.getElementById("loading").style.display = "block";
 
     document.getElementById("change-stickynote-title-newtitle").addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
@@ -98,29 +83,6 @@
         }
     });
 
-    window.api.send("toMain", JSON.stringify({ type: 'GetData', cmd: 'UserData', attributes: "" }));
-    window.api.receive("fromMainC", (args) => {
-        if (args.type == "replyUserData") {
-            var response = JSON.parse(args.attributes);
-            if (response != null) {
-                user_login = response;
-                x = document.getElementsByClassName("use-user-name");
-                for (var i = 0; i < x.length; i++) {
-                    x[i].innerHTML = response.username;
-                }
-                x = document.getElementsByClassName("use-user-email");
-                for (var i = 0; i < x.length; i++) {
-                    x[i].innerHTML = "(" + response.email + ")";
-                    if (response.email_verified == 0) {
-                        x[i].innerHTML += "<p style='display: inline; color: orange;'><i style='color: inherit;' class='fas fa-exclamation-triangle'></i> Not verified</p>";
-                    }
-                }
-                document.getElementById("loading").style.display = "none";
-            }
-
-        }
-    });
-    window.api.send("toMain", JSON.stringify({ type: 'GetData', cmd: 'StickyNotes', attributes: "" }));
     window.api.receive("fromMainD", (args) => {
         if (args.type == "replyStickyNotes") {
             StickyNotes = JSON.parse(args.attributes);

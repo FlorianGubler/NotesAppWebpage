@@ -143,9 +143,8 @@ span.psw {
 .uploadpb-cropper-image-container{
   position: relative;
   margin: 10px;
-  width: 30vw;
+  width: 40vw;
 }
-
 .uploadpb-cropper-image-container canvas, .uploadpb-cropper-image-container img{
   height: 100%;
   /*border: 1px solid white;*/

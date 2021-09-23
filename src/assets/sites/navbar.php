@@ -24,8 +24,6 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
     <link src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.css" rel="stylesheet" />
-    <script src="<?php echo $rootpath; ?>assets/js/customalert.js"></script>
-    <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/customalert.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="../img/icon.ico">
 

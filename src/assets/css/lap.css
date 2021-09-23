@@ -166,6 +166,9 @@ td, th{
 .calculates h2{
     padding: 10px;
 }
+.table-notes-end{
+    padding: 10px;
+}
 .table-notes-end td, #table-notes-end th{
     padding: 10px;
 }

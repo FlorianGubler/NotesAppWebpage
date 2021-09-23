@@ -1,5 +1,17 @@
 <?php
 include "navbar.php";
+if(isset($_POST["submit-usr"])){
+    $uploadstatus = setUsername($user, $_POST["newusername"], $_POST["pswnewusername"]);
+}
+if(isset($_POST["submit-email"])){
+    $uploadstatus = setEmail($user, $_POST["newemail"], $_POST["pswnewemail"]);
+}
+if(isset($_POST["submit-paswd"])){
+    $uploadstatus = setPassword($user, $_POST["oldpassword"], $_POST["newpassword"]);
+}
+if(isset($_FILES["upload-new-pb"])){
+    $uploadstatus = uploadPB($user->id, $_FILES["upload-new-pb"], $_POST["upload-new-pb-data"]);
+}
 ?>
 <script src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.js"></script>
 <script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>
@@ -35,8 +47,11 @@ include "navbar.php";
     <div class="modal-content animate">
         <div class="imgcontainer">
             <img id="profile-pic" src="<?php echo $rootpath . "assets/img/profilepictures/" . $user->profilepicture; ?>" alt="Avatar" class="avatar" draggable="false" onerror="this.src = 'https://dekinotu.myhostpoint.ch/notes/assets/profilepictures/defaultpb.jpg';">
-            <button class="upload-pb-select-picture" type="button" onclick="document.getElementById('pb-upload-hidden').click();" onchange="loadPreviewPB();"><i class="fas fa-pencil-alt"></i> Bearbeiten</button>
-            <input type="file" id="pb-upload-hidden">
+            <button class="upload-pb-select-picture" type="button" onclick="document.getElementById('pb-upload-hidden').click();"><i class="fas fa-pencil-alt"></i> Bearbeiten</button>
+            <form action="" method="POST" id="upload-new-pb-form">
+                <input type="file" name="upload-new-pb" id="pb-upload-hidden" onchange="loadPreviewPB();">
+                <input type="hidden" name="upload-new-pb-data" id="pb-upload-data">
+            </form>
             <p style="display: inline;" class="use-user-name"><?php echo $user->username; ?></p>
             <p style="display: inline; opacity: 0.5; font-size: x-small; padding-top: 0px;" class="use-user-email"><?php echo $user->email; ?></p>
         </div>
@@ -60,10 +75,23 @@ include "navbar.php";
                 <input type="password" id="getoldpassword" name="oldpassword" placeholder="Altes Passwort" required>
                 <button type="submit" name="submit-paswd">Neues Passwort Speichern</button>
             </form>
-
-            <p style='background-color: red;display: none;' id='login-response-false'>Etwas hat nicht geklappt</p>
-            <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich
-                gespeichert</p>
+            <?php
+                if(isset($uploadstatus)){
+                    if($uploadstatus){
+                        ?>
+                            <p style='background-color: red;display: none;' id='login-response-false'>Etwas hat nicht geklappt</p>
+                        <?php
+                    } else{
+                        ?>
+                            <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
+                        <?php
+                    }
+                } else{
+                    ?>
+                        <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
+                    <?php
+                }
+            ?>
         </div>
 
         <div class="container" style="background-color:#404142">
@@ -73,14 +101,15 @@ include "navbar.php";
 </div>
 <script>
     function loadPreviewPB() {
+        document.getElementById("upload-pb-preview-cropper").src = URL.createObjectURL(document.getElementById("pb-upload-hidden").files[0]);
         document.getElementById("upload-pb-container").style.display = "block";
 
         var croppr = new Croppr('#upload-pb-preview-cropper', {
-            aspectRatio: 1
+            aspectRatio: 1,
         });
 
         document.getElementById("submit-changed-image").addEventListener("click", e => {
-            uploadPB(croppr.getValue(), attribute);
+            uploadPB(croppr.getValue());
         });
 
         document.getElementById("slider-resize-image").addEventListener("input", e => {
@@ -113,8 +142,9 @@ include "navbar.php";
         croppr.scaleBy(slider.value);
     }
 
-    function uploadPB(data, filelink) {
-        //Upload PB
+    function uploadPB(data) {
+        document.getElementById("pb-upload-data").value = JSON.stringify(data);
+        document.getElementById("upload-new-pb-form").submit();
     }
 
     function resetInputs() {
