@@ -20,6 +20,7 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 <html lang="de">
 
 <head>
+    <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
@@ -37,14 +38,14 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 
 <body>
     <div id="site-title-container">
-        <a id="menu-expand" onclick="document.getElementById('menu-expand').style.display = 'none';" href="#menu"><i style="color: inherit;" class="fas fa-ellipsis-v"></i></a>
+        <a id="menu-expand" href="#menu"><i style="color: inherit;" class="fas fa-ellipsis-v"></i></a>
         <p id="site-title">ProMarks</p>
     </div>
     <button id="titlebar-shareIcon" onclick="openShareLink();"><i class="fas fa-share-alt"></i></button>
     <button id="site-download-update" onclick="console.error('No Update Available');"><i class="fas fa-download"></i></button>
     <button id="site-reload-btn" onclick="location.reload();"><i class="fas fa-redo"></i></button>
     <nav id="menu">
-        <a id="menu-close" onclick="document.getElementById('menu-expand').style.display = 'block';" href="#"><svg viewBox="0 0 10 10">
+        <a id="menu-close" href="#"><svg viewBox="0 0 10 10">
                 <polygon points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1" />
             </svg></a>
         <div id="nav-user">

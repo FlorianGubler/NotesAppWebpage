@@ -55,18 +55,12 @@ foreach ($notes as $note) {
                 $endnotessemester[$semester][$note->subjectName] += $note->value;
             }
             if (count($subjectnotes) != 0) {
-                $endnotessemester[$semester][$subject] /= count($subjectnotes);
-                $endnotessemester[$semester][$subject] = round($endnotessemester[$semester][$subject] * 2) / 2;
+                $endnotessemester[$semester][$subject . "_count"] = count($subjectnotes);
             }
-            $endnotessemester[$semester]['endnote'] += $endnotessemester[$semester][$subject];
             echo "</tr>";
         }
         if (count($semesternotes) == 0) {
             echo "<p class='not-notes-found'>Keine Noten gefunden</p>";
-        }
-        if (count($semesternotes) != 0) {
-            $endnotessemester[$semester]["endnote"] /= count($semesternotes);
-            $endnotessemester[$semester]["endnote"] = round($endnotessemester[$semester]['endnote'], 1);
         }
         echo "</table>";
     ?>
@@ -74,19 +68,37 @@ foreach ($notes as $note) {
             <h2>Notenberechnung</h2>
             <table class="table-notes-end">
                 <?php
-
+                $semesternotescount = 0;
                 foreach ($endnotessemester[$semester] as $subject => $endnotesubject) {
                     if ($subject != "endnote") {
-                        echo "<tr>";
-                        echo "<th>$subject</th>";
-                        if ($endnotesubject > 4) {
-                            $notestateclass = "grade-good";
-                        } else if ($endnotesubject < 4 && $note->value != 0) {
-                            $notestateclass = "grade-bad";
+                        if (getSubjectsFromName($subject) != false) {
+                            $overSubject = getSubjectsFromName($subject)->overSubject;
+                            if ($overSubject != null) {
+                                $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
+                                $endnotessemester[$semester][$overSubject] += $endnotesubject;
+                                $endnotessemester[$semester][$overSubject] /= $endnotessemester[$semester][$overSubject . "_count"];
+                                unset($endnotessemester[$semester][$subject]);
+                            } else {
+                                $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
+                                $endnotesubject = round($endnotesubject * 2) / 2;
+                                $endnotessemester[$semester]['endnote'] += $endnotesubject;
+                                $semesternotescount++;
+                                echo "<tr>";
+                                echo "<th>$subject</th>";
+                                if ($endnotesubject > 4) {
+                                    $notestateclass = "grade-good";
+                                } else if ($endnotesubject < 4 && $endnotesubject != 0) {
+                                    $notestateclass = "grade-bad";
+                                }
+                                echo "<td class='$notestateclass'>$endnotesubject</td>";
+                                echo "</tr>";
+                            }
                         }
-                        echo "<td class='$notestateclass'>$endnotesubject</td>";
-                        echo "</tr>";
                     }
+                }
+                if ($semesternotescount != 0) {
+                    $endnotessemester[$semester]["endnote"] /= $semesternotescount;
+                    $endnotessemester[$semester]["endnote"] = round($endnotessemester[$semester]['endnote'], 1);
                 }
                 echo "<tr><div class='splitline'></div></tr>";
                 $semesterendnote = $endnotessemester[$semester]["endnote"];

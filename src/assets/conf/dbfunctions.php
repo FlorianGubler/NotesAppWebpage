@@ -20,7 +20,7 @@ function getUserData($userid)
     $checkUserSQL = "SELECT * FROM users WHERE id='" . $userid . "';";
     $result = $conn->query($checkUserSQL);
     $user = $result->fetch_assoc();
-    if(mysqli_num_rows($result) == 0){
+    if (mysqli_num_rows($result) == 0) {
         return false;
     }
     return new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin']);
@@ -73,16 +73,34 @@ function getSubjects()
 {
     require_once("obj/subject.class.php");
     global $conn;
-    $query = "SELECT subjects.id, subjects.FK_school, subjects.additionalTag, schools.schoolName, subjects.subjectName FROM subjects INNER JOIN schools ON subjects.FK_school = schools.id;";
+    $query = "SELECT s1.id, s1.FK_school, s1.additionalTag, schools.schoolName, s1.subjectName, s2.subjectName as 'overSubjectName' FROM subjects s1 INNER JOIN schools ON s1.FK_school = schools.id LEFT JOIN subjects s2 ON s1.FK_overSubject = s2.id;";
     $result = $conn->query($query);
     $subjects = array();
     while ($row = $result->fetch_assoc()) {
-        array_push($subjects, new Subject($row["id"], $row["FK_school"], $row["additionalTag"], $row["schoolName"], $row["subjectName"]));
+        array_push($subjects, new Subject($row["id"], $row["FK_school"], $row["additionalTag"], $row["schoolName"], $row["subjectName"], $row["overSubjectName"]));
     }
-
     return $subjects;
 }
-
+function getSubjectsFromID($searchid)
+{
+    $subjects = getSubjects();
+    foreach ($subjects as $subject) {
+        if ($subject->id == $searchid) {
+            return $subject;
+        }
+    }
+    return false;
+}
+function getSubjectsFromName($searchname)
+{
+    $subjects = getSubjects();
+    foreach ($subjects as $subject) {
+        if ($subject->subjectName == $searchname) {
+            return $subject;
+        }
+    }
+    return false;
+}
 function DeleteStickyNotes($userid)
 {
     global $conn;
@@ -296,7 +314,8 @@ function AdminTools_GetUserList()
     }
     return $users;
 }
-function uploadPB($userid, $uploadpbfile, $uploadpbdata){
+function uploadPB($userid, $uploadpbfile, $uploadpbdata)
+{
     global $conn;
     //generate Filename
     $target_dir = "../../assets/profilepictures/";
