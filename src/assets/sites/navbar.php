@@ -14,20 +14,25 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 } else {
     header("Location: " . $rootpath . "index.php");
 }
+
+if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
+    echo json_encode(GetShareLink($user->id));
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="de">
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
     <link src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.css" rel="stylesheet" />
 
     <link rel="shortcut icon" type="image/x-icon" href="../img/icon.ico">
 
-    <script src="<?php echo $rootpath ?>assets/js/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
+    <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
     <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/copy.js"></script>
     <title>ProMarks</title>
@@ -87,13 +92,13 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
 
             <label>Sharelink</label>
             <div class="share-values-container">
-                <p id="share-link">example.com</p>
-                <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-link').getAttribute('link'));"><i class="fas fa-copy"></i></button>
+                <a id="share-link" target="_blank">Link</a>
+                <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-link').href);"><i class="fas fa-copy"></i></button>
             </div>
 
             <label>Token</label>
             <div class="share-values-container">
-                <p id="share-token">123456</p>
+                <p id="share-token">Token</p>
                 <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-token').innerHTML);"><i class="fas fa-copy"></i></button>
             </div>
         </div>
@@ -127,23 +132,32 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
         }
 
         function renewSharelink() {
-            //Renew SharLink with Ajax Request
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    showNewShareLink(JSON.parse(this.responseText));
+                }
+            };
+            xhttp.open("GET", "<?php echo $_SERVER["PHP_SELF"]; ?>?action=renewsharelink");
+            xhttp.send();
         }
+        renewSharelink();
 
         async function showNewShareLink(response) {
+            LINK_MAX_LENGTH = 30;
             await sleep(2000);
-            full_link = "https://dekinotu.myhostpoint.ch/notes/share.php?link=" + response.link;
-            document.getElementById("share-link").setAttribute("link", full_link);
-            document.getElementById("share-link").addEventListener("click", e => {
-                window.api.send('toMain', JSON.stringify({
-                    type: 'Window',
-                    cmd: 'OpenExternal',
-                    attributes: JSON.stringify(full_link)
-                }));
-            });
-            document.getElementById("share-link").innerHTML = full_link.slice(0, 30) + "...";
+            full_link = "<?php echo $rootpath; ?>share.php?link=" + response.link;
+            document.getElementById("share-link").innerHTML = full_link.slice(0, LINK_MAX_LENGTH) + "...";
+            if (full_link.lenght > 30) {
+                document.getElementById("share-link").innerHTML = full_link;
+            }
+            document.getElementById("share-link").href = full_link;
             document.getElementById("share-token").innerHTML = response.token;
             document.getElementById("renew-share-link").classList.remove("renew-share-link-loading");
+        }
+
+        function sleep(milliseconds) {
+            return new Promise(resolve => setTimeout(resolve, milliseconds));
         }
     </script>
 </body>

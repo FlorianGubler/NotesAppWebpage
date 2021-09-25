@@ -38,7 +38,7 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
   <link rel="stylesheet" href="<?php echo $rootpath ?>assets/css/login.css" type="text/css">
   <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath ?>assets/img/icon.ico">
   <script src="<?php echo $rootpath ?>assets/js/jquery.js"></script>
-  <script src="<?php echo $rootpath ?>assets/js/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
+  <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProMarks - Login</title>
 </head>

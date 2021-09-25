@@ -69,11 +69,10 @@ td, th{
     margin-right: 40px;
 }
 .semester-content{
-    margin: 10px;
     display: none;
     width: 100%;
 }
-.semester-content:target{
+#tables .semester-content:target{
     display: block;
 }
 .table-container{
@@ -136,8 +135,11 @@ td, th{
     justify-content: space-between;
     flex-wrap: wrap;
 }
-.calculates{
-    width: auto;
+#tables .tables-container{
+    max-width: 65%;
+}
+#tables .calculates{
+    width: 30%;
     margin: 10px;
     border-radius: 5px;
     background-color: #343a40;

@@ -1,0 +1,64 @@
+body {
+    background-color: #444444;
+}
+.navigation{
+    width: calc(100% - 10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+.navigation div{
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.navigation a{
+    text-decoration: none;
+}
+.school-content{
+    display: none;
+}
+#BMS{
+    display: block;
+}
+#code-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#code-container label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+#invalid-input{
+    color: red;
+    margin: 10px;
+}
+
+#code-container input {
+    width: 100%;
+    font-family: Verdana;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #adadad;
+    border-radius: 5px;
+}
+
+#code-container button {
+    background-color: #2e2e2e;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 106%;
+}

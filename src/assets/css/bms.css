@@ -54,7 +54,6 @@ td, th{
 }
 .table-notes-norm{
     margin: 10px;
-    min-width: 50%;
     width: fit-content;
     overflow: auto;
 }
