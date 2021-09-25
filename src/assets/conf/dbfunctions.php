@@ -23,7 +23,7 @@ function getUserData($userid)
     if (mysqli_num_rows($result) == 0) {
         return false;
     }
-    return new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin']);
+    return new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin'], $user['passwordhash']);
 }
 
 function getNotes($userid)
@@ -32,7 +32,7 @@ function getNotes($userid)
     global $conn;
 
     $userid = $conn->real_escape_string($userid);
-    $query = "SELECT notes.id, notes.value, notes.examName, notes.FK_subject, notes.FK_user, subjects.FK_school, notes.FK_semester, subjects.additionalTag, schools.schoolName, semesters.semesterTag, subjects.subjectName FROM notes INNER JOIN subjects ON notes.FK_subject = subjects.id INNER JOIN schools ON subjects.FK_school = schools.id INNER JOIN semesters ON notes.FK_semester = semesters.id WHERE FK_user=" . $userid . ";";
+    $query = "SELECT notes.id, notes.value, notes.examName, notes.FK_subject, notes.FK_user, subjects.FK_school, notes.FK_semester, subjects.additionalTag, schools.schoolName, semesters.semesterTag, subjects.subjectName FROM notes JOIN subjects ON notes.FK_subject = subjects.id JOIN schools ON subjects.FK_school = schools.id LEFT JOIN semesters ON notes.FK_semester = semesters.id WHERE FK_user=" . $userid . ";";
     $result = $conn->query($query);
     $notes = array();
     while ($row = $result->fetch_assoc()) {
@@ -80,6 +80,17 @@ function getSubjects()
         array_push($subjects, new Subject($row["id"], $row["FK_school"], $row["additionalTag"], $row["schoolName"], $row["subjectName"], $row["overSubjectName"]));
     }
     return $subjects;
+}
+function getAdditionalTags()
+{
+    global $conn;
+    $query = "SELECT DISTINCT additionalTag FROM subjects";
+    $result = $conn->query($query);
+    $additionalTags = array();
+    while ($row = $result->fetch_assoc()) {
+        array_push($additionalTags, $row["additionalTag"]);
+    }
+    return $additionalTags;
 }
 function getSubjectsFromID($searchid)
 {
@@ -222,20 +233,21 @@ function setUsername($user, $newusername, $password)
 {
     global $conn;
 
-    if ($user["passwordhash"] == hash("sha256", $user->email . $password)) {
+    if ($user->passwordhash == hash("sha256", $user->email . $password)) {
         $newusername = $conn->real_escape_string($newusername);
         $query = "UPDATE users SET username='" . $newusername . "' WHERE id=" . $user->id . ";";
         $conn->query($query);
     } else {
-        http_response_code(403);
+        return false;
     }
+    return true;
 }
 
 function setEmail($user, $newemail, $password)
 {
     global $conn;
 
-    if ($user["passwordhash"] == hash("sha256", $user->email . $password)) {
+    if ($user->passwordhash == hash("sha256", $user->email . $password)) {
         $updatedPsw = hash("sha256", $newemail . $password);
 
         $newemail = $conn->real_escape_string($newemail);
@@ -243,16 +255,24 @@ function setEmail($user, $newemail, $password)
 
         $conn->query($query);
 
-        sendConfirmEmail($newemail);
+        if (!sendConfirmEmail($newemail)) {
+            return false;
+        }
     } else {
-        http_response_code(403);
+        return false;
     }
+    return true;
 }
 
 function sendConfirmEmail($receiver)
 {
+    return true;
+    global $rootpath;
     $subject = 'Confirm Your Email';
-    $message = str_replace("XXXXXXmailXXXXXX", $receiver, file_get_contents("confirm_email_mailsite.html"));
+    $message = file_get_contents("confirm_email_mailsite.html", true);
+    $message = str_replace("%%useremail%%", $receiver, $message);
+    $message = str_replace("%%urlpath%%", $rootpath . "assets/conf/", $message);
+
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= 'From: verify@promarks.ch' . "\r\n";
@@ -267,22 +287,31 @@ function sendConfirmEmail($receiver)
 function setPassword($user, $oldpassword, $newpassword)
 {
     global $conn;
-    if ($user["passwordhash"] == hash("sha256", $user->email . $oldpassword)) {
+    if ($user->passwordhash == hash("sha256", $user->email . $oldpassword)) {
         $updatedPsw = hash("sha256", $user->email . $newpassword);
         $query = "UPDATE users SET passwordhash='" . $updatedPsw . "' WHERE id=" . $user->id . ";";
         $conn->query($query);
     } else {
-        http_response_code(403);
+        return false;
     }
+    return true;
 }
 
-function AdminTools_CreateSubject($subjectName, $FK_school, $addtionalTag)
+function AdminTools_CreateSubject($subjectName, $FK_school, $addtionalTag, $overSubject)
 {
     global $conn;
     if ($addtionalTag == "") {
-        $sql = "INSERT INTO subjects (subjectName, FK_school) VALUES ('$subjectName', $FK_school);";
+        if ($overSubject == "") {
+            $sql = "INSERT INTO subjects (subjectName, FK_school) VALUES ('$subjectName', $FK_school);";
+        } else {
+            $sql = "INSERT INTO subjects (subjectName, FK_school, FK_overSubject) VALUES ('$subjectName', $FK_school, $overSubject);";
+        }
     } else {
-        $sql = "INSERT INTO subjects (subjectName, FK_school, additionalTag) VALUES ('$subjectName', $FK_school, '$addtionalTag');";
+        if ($overSubject == "") {
+            $sql = "INSERT INTO subjects (subjectName, FK_school, additionalTag) VALUES ('$subjectName', $FK_school, '$addtionalTag');";
+        } else {
+            $sql = "INSERT INTO subjects (subjectName, FK_school, additionalTag, FK_overSubject) VALUES ('$subjectName', $FK_school, '$addtionalTag', $overSubject);";
+        }
     }
     $conn->query($sql);
 }
@@ -310,7 +339,7 @@ function AdminTools_GetUserList()
     $users = array();
 
     while ($user = $qry->fetch_assoc()) {
-        array_push($users, new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin']));
+        array_push($users, new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin'], $user['passwordhash']));
     }
     return $users;
 }

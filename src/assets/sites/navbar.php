@@ -1,7 +1,6 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
+require_once("../../config.php");
 
-include "../../config.php";
 $login = false;
 
 if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
@@ -31,8 +30,6 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
     <script src="<?php echo $rootpath ?>assets/js/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
     <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/copy.js"></script>
-    <script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>
-
     <title>ProMarks</title>
 </head>
 
@@ -56,7 +53,7 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a id="bms-anchor" href="bms.php#bms_abschlussnoten"><i class="fas fa-school"></i> BMS Notenstand</a></li>
-            <li><a id="lap-anchor" href="lap.php#BerufsfachschuleModule"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
+            <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
             <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
             <?php

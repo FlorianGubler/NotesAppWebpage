@@ -2,7 +2,10 @@
 include "navbar.php";
 
 if (isset($_POST["create-subject"])) {
-    AdminTools_CreateSubject($_POST["subjectname"], $_POST["school"], $_POST["additionaltag"]);
+    if (!isset($_POST["over-subject"])) {
+        $_POST["over-subject"] = null;
+    }
+    AdminTools_CreateSubject($_POST["subjectname"], $_POST["school"], $_POST["additionaltag"], $_POST["over-subject"]);
 }
 
 if (isset($_POST["create-semester"])) {
@@ -11,6 +14,16 @@ if (isset($_POST["create-semester"])) {
 
 if (isset($_POST["update-user-privileges"])) {
     AdminTools_ChangeuserPrivileges($_POST["userid"], $_POST["newprivilege"]);
+}
+
+$additionalTags = getAdditionalTags();
+$subjects = getSubjects();
+$subjectsstruct = array();
+foreach ($subjects as $subject) {
+    if (!isset($subjectsstruct[$subject->schoolName])) {
+        $subjectsstruct[$subject->schoolName] = array();
+    }
+    array_push($subjectsstruct[$subject->schoolName], $subject);
 }
 ?>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/notes.css">
@@ -65,9 +78,33 @@ if (isset($_POST["update-user-privileges"])) {
                     }
                     ?>
                 </select>
+                <div class="input-container" onclick="checkCheckbox(event, this.getElementsByTagName('input')[0]);">
+                    <input id="overSubjectCheckbox" type="checkbox" name="has-over-subject" onclick="checkOverNote(this);">
+                    <label>Note wird mit in anderer Note einberechnet</label>
+                </div>
+                <select name="over-subject" id="selectOverSubject" required>
+                    <option disabled selected> - Fach wählen - </option>
+                    <?php
+                    foreach ($subjectsstruct as $school => $schoolsubjects) {
+                        echo "<optgroup label='$school'>";
+                        foreach ($schoolsubjects as $subject) {
+                            if ($subject->schoolName == $school) {
+                                echo "<option value='$subject->id'>$subject->subjectName</option>";
+                            }
+                        }
+                    }
+                    ?>
+                </select>
                 <div class="admin-create-input-containers">
                     <label for="create-subject-addtionaltag-input">Additional Tag</label>
-                    <input id="create-subject-addtionaltag-input" placeholder="LAP" name="additionaltag">
+                    <input id="create-subject-addtionaltag-input" placeholder="LAP" name="additionaltag" list="additionaltags">
+                    <datalist id="additionaltags">
+                        <?php
+                        foreach ($additionalTags as $additionalTag) {
+                            echo "<option value='$additionalTag'>";
+                        }
+                        ?>
+                    </datalist>
                 </div>
                 <button type="submit" name="create-subject">Erstellen</button>
             </form>
@@ -81,7 +118,6 @@ if (isset($_POST["update-user-privileges"])) {
                 </div>
                 <button type="submit" name="create-semester">Erstellen</button>
             </form>
-
         </fieldset>
     </div>
 </div>
@@ -97,5 +133,24 @@ if (isset($_POST["update-user-privileges"])) {
         newprivilegeinput.type = "hidden";
         newprivilegeinput.value = newPrivilege;
         return true;
+    }
+
+    function checkCheckbox(e, checkbox) {
+        if (e.target.id != "overSubjectCheckbox") {
+            if (checkbox.checked) {
+                checkbox.checked = false;
+            } else {
+                checkbox.checked = true;
+            }
+            checkOverNote(checkbox);
+        }
+    }
+
+    function checkOverNote(checkbox) {
+        if (checkbox.checked) {
+            document.getElementById("selectOverSubject").style.display = "block";
+        } else {
+            document.getElementById("selectOverSubject").style.display = "none";
+        }
     }
 </script>

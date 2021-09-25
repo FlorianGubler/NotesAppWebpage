@@ -5,10 +5,11 @@ class User
     public $username;
     public $email;
     public $email_is_verified;
+    public $passwordhash;
     public $profilepicture;
     public $admin;
 
-    function __construct($_id, $_username, $_email, $_email_is_verified, $_profilepicture, $_admin)
+    function __construct($_id, $_username, $_email, $_email_is_verified, $_profilepicture, $_admin, $_passwordhash)
     {
         $this->id = $_id;
         $this->username = $_username;
@@ -16,5 +17,6 @@ class User
         $this->email_is_verified = $_email_is_verified;
         $this->profilepicture = $_profilepicture;
         $this->admin = $_admin;
+        $this->passwordhash = $_passwordhash;
     }
 }

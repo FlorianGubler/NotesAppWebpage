@@ -17,6 +17,28 @@
     position: relative;
     padding: 20px;
 }
+.input-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    width: fit-content;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.input-container input{
+    width: fit-content !important;
+    margin: 5px !important;
+    cursor: pointer;
+}
+.input-container label{
+    opacity: 0.7;
+    font-size: small;
+    cursor: pointer;
+}
+#selectOverSubject{
+    display: none;
+}
 .user-list-container{
     max-height: 70%;
     overflow-y: auto;

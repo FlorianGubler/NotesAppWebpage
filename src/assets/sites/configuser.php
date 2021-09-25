@@ -1,20 +1,38 @@
 <?php
-include "navbar.php";
-if(isset($_POST["submit-usr"])){
+require_once("../../config.php");
+
+if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
+    $userdata = getUserData($_COOKIE["sessionkey"]);
+    if ($userdata->username . $_SERVER["REMOTE_ADDR"] == $_COOKIE["sessionid"]) {
+        $user = $userdata;
+        $login = true;
+    } else {
+        header("Location: " . $rootpath . "index.php");
+    }
+} else {
+    header("Location: " . $rootpath . "index.php");
+}
+
+$uploadstatus = null;
+if (isset($_POST["submit-usr"])) {
     $uploadstatus = setUsername($user, $_POST["newusername"], $_POST["pswnewusername"]);
 }
-if(isset($_POST["submit-email"])){
+if (isset($_POST["submit-email"])) {
     $uploadstatus = setEmail($user, $_POST["newemail"], $_POST["pswnewemail"]);
 }
-if(isset($_POST["submit-paswd"])){
+if (isset($_POST["submit-paswd"])) {
     $uploadstatus = setPassword($user, $_POST["oldpassword"], $_POST["newpassword"]);
 }
-if(isset($_FILES["upload-new-pb"])){
+if (isset($_FILES["upload-new-pb"])) {
     $uploadstatus = uploadPB($user->id, $_FILES["upload-new-pb"], $_POST["upload-new-pb-data"]);
 }
+if ($uploadstatus) {
+    header("Location: ".$rootpath . "index.php?logout=true");
+}
+
+include "navbar.php";
 ?>
 <script src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.js"></script>
-<script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/configuser.css">
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/croppr.css">
 <div id="upload-pb-container">
@@ -56,19 +74,19 @@ if(isset($_FILES["upload-new-pb"])){
             <p style="display: inline; opacity: 0.5; font-size: x-small; padding-top: 0px;" class="use-user-email"><?php echo $user->email; ?></p>
         </div>
         <div class="container">
-            <form id="newusername" class="newuserinput">
+            <form id="newusername" class="newuserinput" action="" method="POST">
                 <label>Neuer Benutzername</label>
                 <input id="getnewusername" name="newusername" placeholder="Benutzername" required>
                 <input type="password" id="getpswforuser" name="pswnewusername" placeholder="Passwort" required>
                 <button name="submit-usr" type="submit">Neuer Benutzername Speichern</button>
             </form>
-            <form id="newemail" class="newuserinput">
+            <form id="newemail" class="newuserinput" action="" method="POST">
                 <label>Neue E-Mail</label>
                 <input id="getnewemail" name="newemail" placeholder="E-Mail" required>
                 <input type="password" id="getpswforemail" name="pswnewemail" placeholder="Passwort" required>
                 <button name="submit-email" type="submit">Neue E-Mail Speichern</button>
             </form>
-            <form id="newpassword" class="newuserinput">
+            <form id="newpassword" class="newuserinput" action="" method="POST">
                 <label>Neues Passwort</label>
                 <input type="password" id="getnewpassword" name="newpassword" placeholder="Neues Passwort" required>
                 <input type="password" id="getnewpasswordrepeat" name="newpasswordrepeat" placeholder="Neues Passwort wiederholen" required>
@@ -76,21 +94,21 @@ if(isset($_FILES["upload-new-pb"])){
                 <button type="submit" name="submit-paswd">Neues Passwort Speichern</button>
             </form>
             <?php
-                if(isset($uploadstatus)){
-                    if($uploadstatus){
-                        ?>
-                            <p style='background-color: red;display: none;' id='login-response-false'>Etwas hat nicht geklappt</p>
-                        <?php
-                    } else{
-                        ?>
-                            <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
-                        <?php
-                    }
-                } else{
-                    ?>
-                        <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
-                    <?php
+            if (isset($uploadstatus)) {
+                if ($uploadstatus) {
+            ?>
+                    <p style='background-color: red;display: none;' id='login-response-false'>Etwas hat nicht geklappt</p>
+                <?php
+                } else {
+                ?>
+                    <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
+                <?php
                 }
+            } else {
+                ?>
+                <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
+            <?php
+            }
             ?>
         </div>
 

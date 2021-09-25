@@ -8,7 +8,7 @@ include "navbar.php";
 	<div onclick="location.href='bms.php#bms_abschlussnoten';">
 		<p class="dash-icon"><i class="fas fa-school"></i></p><a>BMS Noten</a>
 	</div>
-	<div onclick="location.href='lap.php#BerufsfachschuleModule';">
+	<div onclick="location.href='lap.php#berufsfachschule_module';">
 		<p class="dash-icon"><i class="fas fa-chalkboard-teacher"></i></p><a>IPA Noten</a>
 	</div>
 	<div onclick="location.href='addnote.php';">

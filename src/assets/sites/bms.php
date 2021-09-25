@@ -29,7 +29,7 @@ foreach ($notes as $note) {
 <ul id="semesters">
     <?php
     foreach ($notessemester as $semester => $semesternotes) {
-        $semesterid = strtolower(str_replace(' ', '_', $semester));
+        $semesterid = urlencode(strtolower(str_replace(' ', '_', $semester)));
         echo "<li class='semester-choose'><a href='#$semesterid'>$semester</a></li>";
     }
     ?>
@@ -37,7 +37,7 @@ foreach ($notes as $note) {
 <div id="tables">
     <?php
     foreach ($notessemester as $semester => $semesternotes) {
-        $semesterid = strtolower(str_replace(' ', '_', $semester));
+        $semesterid = urlencode(strtolower(str_replace(' ', '_', $semester)));
         echo "<div class='semester-content' id='$semesterid'>";
         echo "<table class='table-notes-norm'>";
         $endnotessemester[$semester]["endnote"] = 0;

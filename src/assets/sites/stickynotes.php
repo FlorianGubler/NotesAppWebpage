@@ -7,7 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
-<script src="<?php echo $rootpath; ?>assets/js/sleep.js"></script>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/stickynotes.css">
 <div class="content-title-bar-container">
     <div style="display: inherit;">
