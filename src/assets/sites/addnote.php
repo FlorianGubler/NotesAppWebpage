@@ -14,6 +14,7 @@ foreach ($subjects as $subject) {
 if (isset($_POST["upload-note"])) {
   require_once("../conf/obj/note.class.php");
   uploadNote(new Note(null, $_POST["note"], $_POST["examTag"], $_POST["subject"], $user->id, null, $_POST["semester"], null, null, null, null));
+  header("Location: " . $_SERVER["PHP_SELF"]);
 }
 ?>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/addnote.css">

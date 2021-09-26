@@ -6,14 +6,17 @@ if (isset($_POST["create-subject"])) {
         $_POST["over-subject"] = null;
     }
     AdminTools_CreateSubject($_POST["subjectname"], $_POST["school"], $_POST["additionaltag"], $_POST["over-subject"]);
+    header("Location: " . $_SERVER["PHP_SELF"]);
 }
 
 if (isset($_POST["create-semester"])) {
     AdminTools_CreateSemester($_POST["semestertag"]);
+    header("Location: " . $_SERVER["PHP_SELF"]);
 }
 
 if (isset($_POST["update-user-privileges"])) {
     AdminTools_ChangeuserPrivileges($_POST["userid"], $_POST["newprivilege"]);
+    header("Location: " . $_SERVER["PHP_SELF"]);
 }
 
 $additionalTags = getAdditionalTags();
@@ -80,7 +83,7 @@ foreach ($subjects as $subject) {
                 </select>
                 <div class="input-container" onclick="checkCheckbox(event, this.getElementsByTagName('input')[0]);">
                     <input id="overSubjectCheckbox" type="checkbox" name="has-over-subject" onclick="checkOverNote(this);">
-                    <label>Note wird mit in anderer Note einberechnet</label>
+                    <label>Note wird in andere Note einberechnet</label>
                 </div>
                 <select name="over-subject" id="selectOverSubject" required>
                     <option disabled selected> - Fach wählen - </option>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Sep 2021 um 18:08
+-- Erstellungszeit: 26. Sep 2021 um 15:20
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -30,11 +30,11 @@ SET time_zone = "+00:00";
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL,
   `value` float NOT NULL,
-  `examName` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `examName` varchar(200) COLLATE latin1_general_ci NOT NULL,
   `FK_subject` int(11) NOT NULL,
   `FK_user` int(11) NOT NULL,
-  `FK_semester` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `FK_semester` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Daten für Tabelle `notes`
@@ -61,26 +61,26 @@ INSERT INTO `notes` (`id`, `value`, `examName`, `FK_subject`, `FK_user`, `FK_sem
 (28, 4.37, 'Lineare Gleichungssysteme', 6, 1, 2),
 (29, 5.2, 'Prüfung 4', 1, 1, 2),
 (30, 4.9, 'Prüfung 5', 1, 1, 2),
-(31, 5.4, 'Datenmodell implementieren', 7, 1, 1),
-(32, 5.3, 'Codierungs-, Kompressions- und Verschlüsselungsverfahren einsetzen', 8, 1, 1),
-(37, 4.2, 'LB1', 16, 1, 1),
-(38, 4.2, 'LB2', 16, 1, 1),
-(39, 5, 'LB1', 23, 1, 1),
-(40, 4.2, 'LB2-T1', 23, 1, 1),
-(41, 3.7, 'LB2-T2', 23, 1, 1),
-(42, 5.1, 'LB2-T3', 23, 1, 1),
-(43, 6, 'LB2-T4', 23, 1, 1),
-(44, 4.8, 'LB2', 23, 1, 1),
-(45, 5.1, 'LB3', 23, 1, 1),
-(46, 5, 'Sozialkompetenzen', 23, 1, 1),
-(47, 5.5, 'Sozialkompetenzen', 16, 1, 1),
-(48, 4.8, 'Prüfung 1', 39, 1, 1),
-(49, 4.7, 'Prüfung 2', 39, 1, 1),
-(50, 5.2, 'Prüfung 3', 39, 1, 1),
-(51, 5.5, 'Kompetenzraster', 43, 1, 1),
-(52, 6, 'Abschluss', 11, 1, 1),
-(53, 5.5, 'Abschluss', 17, 1, 1),
-(54, 5.5, 'Abschluss', 18, 1, 1),
+(31, 5.4, 'Datenmodell implementieren', 7, 1, NULL),
+(32, 5.3, 'Codierungs-, Kompressions- und Verschlüsselungsverfahren einsetzen', 8, 1, NULL),
+(37, 4.2, 'LB1', 16, 1, NULL),
+(38, 4.2, 'LB2', 16, 1, NULL),
+(39, 5, 'LB1', 23, 1, NULL),
+(40, 4.2, 'LB2-T1', 23, 1, NULL),
+(41, 3.7, 'LB2-T2', 23, 1, NULL),
+(42, 5.1, 'LB2-T3', 23, 1, NULL),
+(43, 6, 'LB2-T4', 23, 1, NULL),
+(44, 4.8, 'LB2', 23, 1, NULL),
+(45, 5.1, 'LB3', 23, 1, NULL),
+(46, 5, 'Sozialkompetenzen', 23, 1, NULL),
+(47, 5.5, 'Sozialkompetenzen', 16, 1, NULL),
+(48, 4.8, 'Prüfung 1', 39, 1, NULL),
+(49, 4.7, 'Prüfung 2', 39, 1, NULL),
+(50, 5.2, 'Prüfung 3', 39, 1, NULL),
+(51, 5.5, 'Kompetenzraster', 43, 1, NULL),
+(52, 6, 'Abschluss', 11, 1, NULL),
+(53, 5.5, 'Abschluss', 17, 1, NULL),
+(54, 5.5, 'Abschluss', 18, 1, NULL),
 (55, 1.3, 'Französisch Voci 1', 3, 1, 2),
 (56, 1.9, 'Französisch Prüfung 1', 2, 1, 2),
 (57, 4.25, 'Französisch IDAF', 2, 1, 2),
@@ -89,24 +89,23 @@ INSERT INTO `notes` (`id`, `value`, `examName`, `FK_subject`, `FK_user`, `FK_sem
 (70, 3.5, 'Quadratische Gleichungen', 6, 1, 2),
 (71, 2.7, 'Französisch 3/4', 2, 1, 2),
 (76, 2.6, 'Voci 3', 3, 1, 2),
-(93, 5.2, 'LB3', 7, 1, 0),
-(94, 5.8, 'LB2', 7, 1, 0),
-(95, 6, 'LB2', 8, 1, 0),
-(96, 5.1, 'LB3', 8, 1, 0),
-(97, 6, 'Abschlussprüfung 105', 20, 1, 0),
+(93, 5.2, 'LB3', 7, 1, NULL),
+(94, 5.8, 'LB2', 7, 1, NULL),
+(95, 6, 'LB2', 8, 1, NULL),
+(96, 5.1, 'LB3', 8, 1, NULL),
+(97, 6, 'Abschlussprüfung 105', 20, 1, NULL),
 (99, 4.7, 'Prüfung 2 (CH und Industrialisierung)', 4, 1, 2),
 (100, 3.2, 'Prüfung 6', 1, 1, 2),
 (103, 4, 'Prüfung 3', 5, 1, 2),
-(106, 6, 'Uek-307 Abschlussnote', 54, 1, 2),
+(106, 6, 'Uek-307 Abschlussnote', 54, 1, NULL),
 (107, 3.8, 'Trigonometrie', 6, 1, 2),
 (108, 2, 'Prüfung', 2, 1, 2),
-(113, 3.8, 'idk', 4, 22, 2),
 (114, 4.6, 'Prüfung 1', 1, 23, 2),
 (115, 3.7, 'Prüfung 2', 1, 23, 2),
 (116, 4.6, 'Prüfung 3', 1, 23, 2),
-(120, 5.3, 'Prüfung 1', 40, 1, 1),
-(121, 5.1, 'LB1', 26, 1, 1),
-(122, 4.6, 'LB2', 26, 1, 1);
+(120, 5.3, 'Prüfung 1', 40, 1, NULL),
+(121, 5.1, 'LB1', 26, 1, NULL),
+(122, 4.6, 'LB2', 26, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -116,8 +115,8 @@ INSERT INTO `notes` (`id`, `value`, `examName`, `FK_subject`, `FK_user`, `FK_sem
 
 CREATE TABLE `schools` (
   `id` int(11) NOT NULL,
-  `schoolName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `schoolName` varchar(255) COLLATE latin1_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Daten für Tabelle `schools`
@@ -135,8 +134,8 @@ INSERT INTO `schools` (`id`, `schoolName`) VALUES
 
 CREATE TABLE `semesters` (
   `id` int(11) NOT NULL,
-  `semesterTag` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `semesterTag` varchar(50) COLLATE latin1_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Daten für Tabelle `semesters`
@@ -157,18 +156,10 @@ INSERT INTO `semesters` (`id`, `semesterTag`) VALUES
 CREATE TABLE `session_links` (
   `id` int(11) NOT NULL,
   `FK_user` int(11) NOT NULL,
-  `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE latin1_general_ci NOT NULL,
   `token` int(6) NOT NULL,
   `create_date` date NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Daten für Tabelle `session_links`
---
-
-INSERT INTO `session_links` (`id`, `FK_user`, `link`, `token`, `create_date`) VALUES
-(225, 1, 'cd999e56c354de350c24d4c07f0c1d6c2bda1f506b9cf5ae0a4008bf83ae1a45', 517471, '2021-07-12'),
-(226, 1, 'ec5cb8d2a0d11de9adb8de9cb5eba641e9913f644c0a946b52e40f2e235a0942', 737890, '2021-07-12');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -179,19 +170,10 @@ INSERT INTO `session_links` (`id`, `FK_user`, `link`, `token`, `create_date`) VA
 CREATE TABLE `stickynotes` (
   `PK_stickynote` int(11) NOT NULL,
   `createtime` datetime NOT NULL DEFAULT current_timestamp(),
-  `title` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Neue Notiz',
-  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(300) COLLATE latin1_general_ci NOT NULL DEFAULT 'Neue Notiz',
+  `value` longtext COLLATE latin1_general_ci NOT NULL,
   `FK_user` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Daten für Tabelle `stickynotes`
---
-
-INSERT INTO `stickynotes` (`PK_stickynote`, `createtime`, `title`, `value`, `FK_user`) VALUES
-(39, '2021-06-30 11:33:18', 'Florianisverydumb', '{\"time\":1625045754309,\"blocks\":[{\"id\":\"RejGuO5Q3_\",\"type\":\"header\",\"data\":{\"text\":\"Hello\",\"level\":2}},{\"id\":\"wqve6dcE6N\",\"type\":\"paragraph\",\"data\":{\"text\":\":)\"}},{\"id\":\"7lObhYpZhm\",\"type\":\"table\",\"data\":{\"content\":[[\"X\",\"\",\"X\"],[\"\",\"X\",\"O\"],[\"O\",\"\",\"\"]]}}],\"version\":\"2.22.1\"}', 22),
-(42, '2021-07-08 08:51:40', 'Schulden Mama', '{\"time\":1625732424725,\"blocks\":[{\"id\":\"hi1mlJcAsy\",\"type\":\"header\",\"data\":{\"text\":\"Schulden Mama\",\"level\":2}},{\"id\":\"JT1u7t_w44\",\"type\":\"table\",\"data\":{\"content\":[[\"Helm &amp; Handschuhe\",\"233.33\"],[\"Neue Fussraste\",\"56.14\"],[\"Motorrad\",\"4600\"],[\"Grundkurs\",\"?\"],[\"Verkehrskunde\",\"139\"],[\"Tanken\",\"15\"],[\"1. Versicherungsrechnung\",\"400\"],[\"Total\",\"5’443.47\"]]}}],\"version\":\"2.22.1\"}', 1),
-(44, '2021-07-12 16:11:22', 'Test', '{\"time\":1629975409821,\"blocks\":[{\"id\":\"M1R35Hjiqr\",\"type\":\"header\",\"data\":{\"text\":\"Test\",\"level\":2}},{\"id\":\"D6-TfG9Q-S\",\"type\":\"table\",\"data\":{\"withHeadings\":false,\"content\":[[\"d\",\"\"]]}}],\"version\":\"2.22.2\"}', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -201,57 +183,60 @@ INSERT INTO `stickynotes` (`PK_stickynote`, `createtime`, `title`, `value`, `FK_
 
 CREATE TABLE `subjects` (
   `id` int(11) NOT NULL,
-  `subjectName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subjectName` varchar(255) COLLATE latin1_general_ci NOT NULL,
   `FK_school` int(11) NOT NULL,
-  `additionalTag` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `additionalTag` varchar(200) COLLATE latin1_general_ci DEFAULT NULL,
+  `FK_overSubject` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Daten für Tabelle `subjects`
 --
 
-INSERT INTO `subjects` (`id`, `subjectName`, `FK_school`, `additionalTag`) VALUES
-(1, 'Chemie', 1, NULL),
-(2, 'Französisch', 1, NULL),
-(3, 'Französisch Vokabeln', 1, NULL),
-(4, 'Geschichte', 1, NULL),
-(5, 'BWL', 1, NULL),
-(6, 'Mathematik', 1, NULL),
-(7, 'M104', 2, 'Berufsfachschule Module'),
-(8, 'M114', 2, 'Berufsfachschule Module'),
-(11, 'M304', 2, 'ÜK Module'),
-(12, 'Resultat der Arbeit', 2, 'IPA Abschlussprüfung'),
-(13, 'Dokumentation', 2, 'IPA Abschlussprüfung'),
-(15, 'Fachgespräch und Präsentation', 2, 'IPA Abschlussprüfung'),
-(16, 'M100', 2, 'Berufsfachschule Module'),
-(17, 'M305', 2, 'ÜK Module'),
-(18, 'M101', 2, 'ÜK Module'),
-(19, 'M318', 2, 'ÜK Module'),
-(20, 'M105', 2, 'ÜK Module'),
-(21, 'M107', 2, 'ÜK Module'),
-(22, 'M335', 2, 'ÜK Module'),
-(23, 'M117', 2, 'Berufsfachschule Module'),
-(24, 'M120', 2, 'Berufsfachschule Module'),
-(25, 'M122', 2, 'Berufsfachschule Module'),
-(26, 'M123', 2, 'Berufsfachschule Module'),
-(27, 'M133', 2, 'Berufsfachschule Module'),
-(28, 'M150', 2, 'Berufsfachschule Module'),
-(29, 'M151', 2, 'Berufsfachschule Module'),
-(30, 'M152', 2, 'Berufsfachschule Module'),
-(31, 'M153', 2, 'Berufsfachschule Module'),
-(32, 'M183', 2, 'Berufsfachschule Module'),
-(33, 'M214', 2, 'Berufsfachschule Module'),
-(34, 'M226', 2, 'Berufsfachschule Module'),
-(35, 'M242', 2, 'Berufsfachschule Module'),
-(36, 'M254', 2, 'Berufsfachschule Module'),
-(37, 'M306', 2, 'Berufsfachschule Module'),
-(38, 'M326', 2, 'Berufsfachschule Module'),
-(39, 'M403', 2, 'Berufsfachschule Module'),
-(40, 'M404', 2, 'Berufsfachschule Module'),
-(41, 'M411', 2, 'Berufsfachschule Module'),
-(42, 'M426', 2, 'Berufsfachschule Module'),
-(43, 'M431', 2, 'Berufsfachschule Module'),
-(54, 'M307', 2, 'ÜK Module');
+INSERT INTO `subjects` (`id`, `subjectName`, `FK_school`, `additionalTag`, `FK_overSubject`) VALUES
+(1, 'Chemie', 1, NULL, NULL),
+(2, 'Französisch', 1, NULL, NULL),
+(3, 'Französisch Vokabeln', 1, NULL, 2),
+(4, 'Geschichte', 1, NULL, NULL),
+(5, 'BWL', 1, NULL, NULL),
+(6, 'Mathematik', 1, NULL, NULL),
+(7, 'M104', 2, 'Berufsfachschule Module', NULL),
+(8, 'M114', 2, 'Berufsfachschule Module', NULL),
+(11, 'M304', 2, 'ÜK Module', NULL),
+(12, 'Resultat der Arbeit', 2, 'IPA Abschlussprüfung', NULL),
+(13, 'Dokumentation', 2, 'IPA Abschlussprüfung', NULL),
+(15, 'Fachgespräch und Präsentation', 2, 'IPA Abschlussprüfung', NULL),
+(16, 'M100', 2, 'Berufsfachschule Module', NULL),
+(17, 'M305', 2, 'ÜK Module', NULL),
+(18, 'M101', 2, 'ÜK Module', NULL),
+(19, 'M318', 2, 'ÜK Module', NULL),
+(20, 'M105', 2, 'ÜK Module', NULL),
+(21, 'M107', 2, 'ÜK Module', NULL),
+(22, 'M335', 2, 'ÜK Module', NULL),
+(23, 'M117', 2, 'Berufsfachschule Module', NULL),
+(24, 'M120', 2, 'Berufsfachschule Module', NULL),
+(25, 'M122', 2, 'Berufsfachschule Module', NULL),
+(26, 'M123', 2, 'Berufsfachschule Module', NULL),
+(27, 'M133', 2, 'Berufsfachschule Module', NULL),
+(28, 'M150', 2, 'Berufsfachschule Module', NULL),
+(29, 'M151', 2, 'Berufsfachschule Module', NULL),
+(30, 'M152', 2, 'Berufsfachschule Module', NULL),
+(31, 'M153', 2, 'Berufsfachschule Module', NULL),
+(32, 'M183', 2, 'Berufsfachschule Module', NULL),
+(33, 'M214', 2, 'Berufsfachschule Module', NULL),
+(34, 'M226', 2, 'Berufsfachschule Module', NULL),
+(35, 'M242', 2, 'Berufsfachschule Module', NULL),
+(36, 'M254', 2, 'Berufsfachschule Module', NULL),
+(37, 'M306', 2, 'Berufsfachschule Module', NULL),
+(38, 'M326', 2, 'Berufsfachschule Module', NULL),
+(39, 'M403', 2, 'Berufsfachschule Module', NULL),
+(40, 'M404', 2, 'Berufsfachschule Module', NULL),
+(41, 'M411', 2, 'Berufsfachschule Module', NULL),
+(42, 'M426', 2, 'Berufsfachschule Module', NULL),
+(43, 'M431', 2, 'Berufsfachschule Module', NULL),
+(54, 'M307', 2, 'ÜK Module', NULL),
+(57, 'Naturwissenschaften', 1, NULL, NULL),
+(60, 'Physik', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -261,22 +246,20 @@ INSERT INTO `subjects` (`id`, `subjectName`, `FK_school`, `additionalTag`) VALUE
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(100) COLLATE latin1_general_ci NOT NULL,
+  `email` varchar(255) COLLATE latin1_general_ci NOT NULL,
   `email_confirmed` tinyint(1) NOT NULL DEFAULT 0,
-  `passwordhash` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `profilepicture` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'defaultpb.jpg',
+  `passwordhash` varchar(1000) COLLATE latin1_general_ci NOT NULL,
+  `profilepicture` varchar(100) COLLATE latin1_general_ci NOT NULL DEFAULT 'defaultpb.jpg',
   `admin` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Daten für Tabelle `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `email_confirmed`, `passwordhash`, `profilepicture`, `admin`) VALUES
-(1, 'Florian Gubler', 'gubler.florian@gmx.net', 1, '7527334b5de227445adccbf52e9671178e310e3c8f41a6bda7399fa9aecfd8b6', 'profilepicture_7.jpg', 1),
-(21, 'Test User', 'vijanet227@jq600.com', 1, '09d0e941cc7d677ebb635eac989ca3271297dbdfece6398307bf75c0b7efa3e1', 'defaultpb.jpg', 1),
-(22, 'Nino Arisona', 'nino@shitmail.me', 1, 'e880f3529ec8d3719b13d2019aa8572a71d8eb7fc911418e0e972b36fe723383', 'profilepicture_5.jpg', 0),
+(1, 'Florian Gubler', 'gubler.florian@gmx.net', 0, '7527334b5de227445adccbf52e9671178e310e3c8f41a6bda7399fa9aecfd8b6', 'profilepicture_7.jpg', 1),
 (23, 'Jon Bunjaku', 'bunjakujon123@gmail.com', 0, '060103dee161e268fd1b31abecbf371444364fd9d513f3064398463c159d3f4d', 'profilepicture_6.jpg', 0);
 
 --
@@ -323,7 +306,8 @@ ALTER TABLE `stickynotes`
 ALTER TABLE `subjects`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `subjectName` (`subjectName`),
-  ADD KEY `FK_school` (`FK_school`);
+  ADD KEY `FK_school` (`FK_school`),
+  ADD KEY `FK_overSubject` (`FK_overSubject`);
 
 --
 -- Indizes für die Tabelle `users`
@@ -357,19 +341,19 @@ ALTER TABLE `semesters`
 -- AUTO_INCREMENT für Tabelle `session_links`
 --
 ALTER TABLE `session_links`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `stickynotes`
 --
 ALTER TABLE `stickynotes`
-  MODIFY `PK_stickynote` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `PK_stickynote` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT für Tabelle `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT für Tabelle `users`
@@ -404,7 +388,8 @@ ALTER TABLE `session_links`
 -- Constraints der Tabelle `subjects`
 --
 ALTER TABLE `subjects`
-  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`FK_school`) REFERENCES `schools` (`id`);
+  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`FK_school`) REFERENCES `schools` (`id`),
+  ADD CONSTRAINT `subjects_ibfk_2` FOREIGN KEY (`FK_overSubject`) REFERENCES `subjects` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

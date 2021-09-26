@@ -73,7 +73,7 @@ function getSubjects()
 {
     require_once("obj/subject.class.php");
     global $conn;
-    $query = "SELECT s1.id, s1.FK_school, s1.additionalTag, schools.schoolName, s1.subjectName, s2.subjectName as 'overSubjectName' FROM subjects s1 INNER JOIN schools ON s1.FK_school = schools.id LEFT JOIN subjects s2 ON s1.FK_overSubject = s2.id;";
+    $query = "SELECT s1.id, s1.FK_school, s1.additionalTag, schools.schoolName, s1.subjectName, s2.subjectName as 'overSubjectName' FROM subjects s1 JOIN schools ON s1.FK_school = schools.id LEFT JOIN subjects s2 ON s1.FK_overSubject = s2.id;";
     $result = $conn->query($query);
     $subjects = array();
     while ($row = $result->fetch_assoc()) {
@@ -112,20 +112,10 @@ function getSubjectsFromName($searchname)
     }
     return false;
 }
-function DeleteStickyNotes($userid)
-{
-    global $conn;
-
-    $current_date = date("Y-m-d");
-
-    $sql = "DELETE FROM session_links WHERE FK_user=$userid AND create_date < DATE '$current_date'";
-    $conn->query($sql);
-}
 
 function GetShareLink($userid)
 {
     global $conn;
-    DeleteStickyNotes($userid);
 
     $token = random_int(100000, 999999);
     $link = hash("sha256", $userid . uniqid("", true));
@@ -150,29 +140,28 @@ function getStickyNotes($userid)
     while ($row = $qry->fetch_assoc()) {
         array_push($stickynotes, new StickyNotes($row["PK_stickynote"], $row["createtime"], $row["title"]));
     }
-    return json_encode($stickynotes);
+    return $stickynotes;
 }
 
 function getStickyNotesVal($PK_stickyNote)
 {
     global $conn;
-    global $current_user;
-    $sql = "SELECT stickynotes.PK_stickynote, stickynotes.value FROM stickynotes WHERE PK_stickynote = $PK_stickyNote AND FK_user=" . $current_user["id"] . ";";
+    $sql = "SELECT stickynotes.PK_stickynote, stickynotes.value FROM stickynotes WHERE PK_stickynote = $PK_stickyNote;";
     $qry = $conn->query($sql);
-    $result = $row = $qry->fetch_assoc();
+    $result = $qry->fetch_assoc();
     $stickynoteval = new stdClass();
     $stickynoteval->PK_stickynote = $result["PK_stickynote"];
     $stickynoteval->value = $result["value"];
-    return json_encode($stickynoteval);
+    return $stickynoteval;
 }
 
-function saveStickyNote($id, $newvalue)
+function saveStickyNote($stickynoteid, $newvalue)
 {
     global $conn;
 
     $newvalue = $conn->real_escape_string($newvalue);
-    $query = "UPDATE stickynotes SET value='" . $newvalue . "' WHERE PK_stickynote=" . $id . ";";
-    $conn->query($query);
+    $query = "UPDATE stickynotes SET value='" . $newvalue . "' WHERE PK_stickynote=" . $stickynoteid . ";";
+    return $conn->query($query);
 }
 
 function createStickyNote($title, $value = "", $userid)
@@ -186,21 +175,21 @@ function createStickyNote($title, $value = "", $userid)
     $query = "INSERT INTO stickynotes (title, value, FK_user) VALUES ('" . $title . "', '" . $value . "', $userid);";
 
     if (!$conn->query($query)) {
-        http_response_code(406);
+        return false;
     }
 }
 
-function ChangeStickyNoteTitle($stickynoteID, $newTitle, $userid)
+function ChangeStickyNoteTitle($stickynoteID, $newTitle)
 {
     global $conn;
 
     $newTitle = $conn->real_escape_string($newTitle);
     $stickynoteID = $conn->real_escape_string($stickynoteID);
 
-    $query = "UPDATE stickynotes SET title = '$newTitle' WHERE PK_stickynote = $stickynoteID AND FK_user = $userid;";
+    $query = "UPDATE stickynotes SET title = '$newTitle' WHERE PK_stickynote = $stickynoteID";
 
     if (!$conn->query($query)) {
-        http_response_code(406);
+        return false;
     }
 }
 
@@ -212,7 +201,7 @@ function deleteStickyNote($PK_stickynote)
     $query = "DELETE FROM stickynotes WHERE PK_stickynote = '" . $PK_stickynote . "';";
 
     if (!$conn->query($query)) {
-        http_response_code(406);
+        return false;
     }
 }
 
@@ -224,7 +213,7 @@ function uploadNote($note)
     $query = "INSERT INTO notes (value, examName, FK_subject, FK_user, FK_semester) VALUES (" . $note->value . ", '" . $note->examName . "', " . $note->FK_subject . ", " . $note->FK_user . ", " . $note->FK_semester . ");";
 
     if (!$conn->query($query)) {
-        http_response_code(406);
+        return false;
     }
 }
 
@@ -347,7 +336,7 @@ function uploadPB($userid, $uploadpbfile, $uploadpbdata)
 {
     global $conn;
     //generate Filename
-    $target_dir = "../../assets/profilepictures/";
+    $target_dir = "../img/profilepictures/";
     $filecount = count(scandir($target_dir)) - 1;
     file_put_contents("../loging.txt", $filecount);
     $newfilename = "profilepicture_" . ($filecount) . "." . explode(".", $uploadpbfile["name"])[count(explode(".", $uploadpbfile["name"])) - 1];

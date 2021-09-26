@@ -52,6 +52,9 @@ td, th{
     border-top: 1px solid #3e444a;
     border-bottom: 1px solid #3e444a;
 }
+.table-notes-norm{
+    margin: 10px;
+}
 #table-notes-norm{
     margin: 10px;
     width: 80%;

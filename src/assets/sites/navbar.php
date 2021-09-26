@@ -15,11 +15,16 @@ if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
     header("Location: " . $rootpath . "index.php");
 }
 
-if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
+if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
     echo json_encode(GetShareLink($user->id));
     exit;
 }
 
+try {
+    $firstbmssemester = urlencode(strtolower(str_replace(' ', '_', getNotes($user->id)[0]->semesterTag)));
+} catch (Exception $e) {
+    $firstbmssemester = "";
+}
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -57,7 +62,7 @@ if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
         <div id="menu-splitline"></div>
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a id="bms-anchor" href="bms.php#bms_abschlussnoten"><i class="fas fa-school"></i> BMS Notenstand</a></li>
+            <li><a id="bms-anchor" href="bms.php#<?php echo $firstbmssemester; ?>"><i class="fas fa-school"></i> BMS Notenstand</a></li>
             <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
             <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
@@ -88,7 +93,7 @@ if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
                 </div>
             </div>
 
-            <button id="renew-share-link" onclick="renewSharelink();"><i class="fas fa-sync-alt"></i></button>
+            <button id="renew-share-link" onclick="renewSharelink(this);"><i class="fas fa-sync-alt"></i></button>
 
             <label>Sharelink</label>
             <div class="share-values-container">
@@ -102,16 +107,6 @@ if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
                 <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-token').innerHTML);"><i class="fas fa-copy"></i></button>
             </div>
         </div>
-    </div>
-    <div id="internet-connection-failed">
-        <img src="<?php echo $rootpath ?>assets/img/ban.svg" alt="ban-icon">
-        <p>Es konnte keine Verbindung zum Server hergestellt werden</p>
-    </div>
-    <div id="retry" onclick="location.reload(true)">
-        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
-            <path d="M7 9h-7v-7h1v5.2c1.853-4.237 6.083-7.2 11-7.2 6.623 0 12 5.377 12 12s-5.377 12-12 12c-6.286 0-11.45-4.844-11.959-11h1.004c.506 5.603 5.221 10 10.955 10 6.071 0 11-4.929 11-11s-4.929-11-11-11c-4.66 0-8.647 2.904-10.249 7h5.249v1z" />
-        </svg>
-        <p>Wiederholen</p>
     </div>
     <script>
         el = document.getElementById("share-info");
@@ -131,7 +126,8 @@ if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
             }
         }
 
-        function renewSharelink() {
+        function renewSharelink(el) {
+            el.classList.add("renew-share-link-loading");
             const xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -141,7 +137,7 @@ if (isset($_GET["action"]) && $_GET["action"] = "renewsharelink") {
             xhttp.open("GET", "<?php echo $_SERVER["PHP_SELF"]; ?>?action=renewsharelink");
             xhttp.send();
         }
-        renewSharelink();
+        renewSharelink(document.getElementById("renew-share-link"));
 
         async function showNewShareLink(response) {
             LINK_MAX_LENGTH = 30;

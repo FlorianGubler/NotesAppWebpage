@@ -27,7 +27,7 @@ if (isset($_FILES["upload-new-pb"])) {
     $uploadstatus = uploadPB($user->id, $_FILES["upload-new-pb"], $_POST["upload-new-pb-data"]);
 }
 if ($uploadstatus) {
-    header("Location: ".$rootpath . "index.php?logout=true");
+    header("Location: " . $rootpath . "index.php?logout=true");
 }
 
 include "navbar.php";
@@ -66,7 +66,7 @@ include "navbar.php";
         <div class="imgcontainer">
             <img id="profile-pic" src="<?php echo $rootpath . "assets/img/profilepictures/" . $user->profilepicture; ?>" alt="Avatar" class="avatar" draggable="false" onerror="this.src = 'https://dekinotu.myhostpoint.ch/notes/assets/profilepictures/defaultpb.jpg';">
             <button class="upload-pb-select-picture" type="button" onclick="document.getElementById('pb-upload-hidden').click();"><i class="fas fa-pencil-alt"></i> Bearbeiten</button>
-            <form action="" method="POST" id="upload-new-pb-form">
+            <form action="" method="POST" id="upload-new-pb-form" enctype="multipart/form-data">
                 <input type="file" name="upload-new-pb" id="pb-upload-hidden" onchange="loadPreviewPB();">
                 <input type="hidden" name="upload-new-pb-data" id="pb-upload-data">
             </form>
@@ -119,10 +119,12 @@ include "navbar.php";
 </div>
 <script>
     function loadPreviewPB() {
-        document.getElementById("upload-pb-preview-cropper").src = URL.createObjectURL(document.getElementById("pb-upload-hidden").files[0]);
+        imgpreview = document.getElementById("upload-pb-preview-cropper");
+        imgpreview.src = URL.createObjectURL(document.getElementById("pb-upload-hidden").files[0]);
         document.getElementById("upload-pb-container").style.display = "block";
 
         var croppr = new Croppr('#upload-pb-preview-cropper', {
+            startSize: [300, 300, 'px'],
             aspectRatio: 1,
         });
 
