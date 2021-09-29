@@ -112,7 +112,7 @@ include "navbar.php";
             ?>
         </div>
 
-        <div class="container" style="background-color:#404142">
+        <div class="container footer-container" style="background-color:#404142">
             <span class="psw">* Bei Änderungen ist ein erneutes Login vonnöten</span>
         </div>
     </div>

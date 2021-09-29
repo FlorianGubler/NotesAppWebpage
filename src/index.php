@@ -37,10 +37,9 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
   <link rel="stylesheet" href="<?php echo $rootpath ?>assets/css/login.css" type="text/css">
   <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath ?>assets/img/icon.ico">
-  <script src="<?php echo $rootpath ?>assets/js/jquery.js"></script>
   <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProMarks - Login</title>
+  <title>Noten - Login</title>
 </head>
 
 <body>
@@ -48,7 +47,7 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
     <form class="modal-content animate" action="" method="POST">
       <div class="imgcontainer">
         <img src="<?php echo $rootpath ?>assets/img/logo.png" alt="Avatar" class="avatar">
-        <h2>ProMarks</h2>
+        <h2>Helsana Noten Tool</h2>
       </div>
       <div class="container">
         <label for="uname"><b>E-Mail</b></label>
@@ -64,7 +63,7 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
         <?php } ?>
       </div>
 
-      <div class="container" style="background-color:#404142">
+      <div class="container footer-container">
         <span class="psw"><a style="color: rgb(103, 103, 216); cursor: pointer;" href="<?php echo $rootpath ?>assets/sites/register.php">Registrieren</a></span>
       </div>
     </form>

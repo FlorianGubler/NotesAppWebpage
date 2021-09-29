@@ -52,7 +52,7 @@ if (isset($_POST["upload-note"])) {
       <p style='background-color: #4ada26; color: #404142;display: none;' id='login-response-true'>Note erfolgreich hochgeladen :)</p>
     </div>
 
-    <div class="container" style="background-color:#404142">
+    <div class="container footer-container">
       <span class="psw"><a href="mailto:gubler.florian@gmx.net">Probleme beim hochladen?</a></span>
     </div>
   </form>

@@ -1,5 +1,6 @@
 h1{
     margin: 5px;
+    color: var(--hlsRot);
 }
 #list-notes-container{
     width: 250px;
@@ -21,6 +22,9 @@ h1{
     color: white;
     cursor: pointer;
 }
+#list-notes-expand svg path{
+    color: var(--hlsRot);
+}
 #list-notes-expand:hover{
     opacity: 0.6;
 }
@@ -32,16 +36,16 @@ h1{
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    background-color: rgb(54, 54, 54);
+    background-color: rgb(235, 235, 235);
     border-radius: 5px;
     cursor: pointer;
     position: relative;
-    box-shadow: 5px 5px 5px black;
-
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.747);
 }
 .stickynotelistelement-active{
-    background-color: rgb(73, 73, 73);
-    border: 1px solid rgb(112, 112, 112);
+    background-color: rgb(235, 235, 235);
+    border: 1px solid rgb(168, 168, 168);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.87);
 }
 .stickynotelistelement:hover{
     opacity: 0.6;
@@ -49,6 +53,9 @@ h1{
 .stickynotelistelementIcon{
     font-size: xx-large;
     margin: 10px;
+}
+.stickynotelistelementIcon svg path{
+    fill: var(--hlsRot);
 }
 .StickyNoteListElActionsContainer{
     position: absolute;
@@ -91,10 +98,12 @@ h1{
     justify-content: baseline;
 }
 .stickynotelistelementTitle{
+    color: #414141;
     font-size:medium;
     margin-bottom: 5px;
 }
 .stickynotelistelementTime{
+    color: #414141;
     font-size: x-small;
     opacity: 0.75;
 }
@@ -116,7 +125,7 @@ h1{
     width: 17px !important;
 }
 .create-stickyNote svg path{
-    fill: rgb(84, 133, 207);
+    fill: var(--hlsRot);
 
 }
 .create-stickyNote:hover{
@@ -130,12 +139,12 @@ h1{
 }
 /********* EDITOR JS************/
 #editorjs{
-    background-color: rgb(49, 49, 49);
+    background-color: rgb(230, 230, 230);
     max-height: 80vh;
     overflow: auto;
 }
 .ce-toolbar__settings-btn{
-    background-color: #7a7a7a00;
+    background-color: transparent;
 }
 .ce-block__content, .ce-toolbar__content{
     margin: 0 15px;
@@ -146,8 +155,11 @@ h1{
 .ce-toolbox{
     left: 45px;
 }
+.ce-toolbox__button svg path{
+    fill: #242525;
+}
 #editorjs use{
-    fill: #919191;
+    fill: var(--hlsRot);
 }
 /******************************/
 .content-container-stickynotes{
@@ -162,7 +174,8 @@ h1{
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    background-color: #242525;
+    background-color: #dadada;
+    border: 1px solid rgb(199, 199, 199);
     animation: elementPopUp 0.5s ease forwards;
     position: absolute;
     left: 50%;
@@ -171,7 +184,7 @@ h1{
     z-index: 100;
     padding: 10px;
     padding-bottom: 0;
-    box-shadow: 0px 3px 33px 12px rgba(0,0,0,0.74);
+    box-shadow: 0px 3px 33px 12px rgba(0, 0, 0, 0.486);
 }
 
 @keyframes elementPopUp {
@@ -192,17 +205,21 @@ h1{
     margin: 10px;
 }
 
-.create-stickynote-header p, .change-stickynote-title-header p{
+.create-stickynote-header p path, .change-stickynote-title-header p path{
     cursor: pointer;
+    color: var(--hlsRot);
 }
 .create-stickynote-header p:hover, .change-stickynote-title-header p:hover{
     opacity: 0.6;
 }
 
+.create-stickynote-header h2, .change-stickynote-title-header h2{
+    color: var(--hlsRot);
+}
+
 .create-stickynote-body, .change-stickynote-title-body{
     width: 100%;
     margin: 10px;
-    color: #242525;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -211,9 +228,9 @@ h1{
 
 .create-stickynote-body input, .change-stickynote-title-body input{
     padding: 10px;
-    background-color: #242525;
+    background-color: #e2e2e2;
     border: 1px solid rgb(153, 153, 153);
-    color: rgb(175, 175, 175);
+    color: rgb(85, 85, 85);
 }
 
 .create-stickynote-body input:focus, .change-stickynote-title-body input:focus{
@@ -222,15 +239,16 @@ h1{
 
 .create-stickynote-body button, .change-stickynote-title-body button{
     margin: 10px;
-    background-color: #242525;
+    background-color: #d3d3d3;
     border-radius: 0;
-    border: 1px solid rgb(92, 92, 92);
+    border: 1px solid rgb(146, 146, 146);
     padding: 5px;
+    color: var(--hlsRot);
     cursor: pointer;
 }
 
 .create-stickynote-body button:hover, .change-stickynote-title-body button:hover{
-    background-color: #424242;
+    opacity: 0.8;
 }
 
 .config-editor-container{
@@ -241,7 +259,8 @@ h1{
 }
 
 #autosave-off-save-editor{
-    background-color: gray;
+    background-color: rgb(216, 216, 216);
+    color: var(--hlsRot);
     padding: 5px;
     border-radius: 5px;
     margin: 10px;
@@ -280,6 +299,10 @@ h1{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+#no-stickynotes-found p{
+    color: var(--hlsRot);
+    text-align: center;
 }
 
 .no-stickynotes-found-imgcontainer{

@@ -40,13 +40,13 @@ try {
     <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
     <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/copy.js"></script>
-    <title>ProMarks</title>
+    <title>Helsana Noten</title>
 </head>
 
 <body>
     <div id="site-title-container">
         <a id="menu-expand" href="#menu"><i style="color: inherit;" class="fas fa-ellipsis-v"></i></a>
-        <p id="site-title">ProMarks</p>
+        <p id="site-title">Helsana Noten</p>
     </div>
     <button id="titlebar-shareIcon" onclick="openShareLink();"><i class="fas fa-share-alt"></i></button>
     <button id="site-download-update" onclick="console.error('No Update Available');"><i class="fas fa-download"></i></button>
@@ -88,7 +88,7 @@ try {
 
                 <div id="share-info-text">
                     <p>
-                        Diese Links werden nach ca. 1 Tag ungültig. Zudem ist zurzeit nur das BMS Notensharing möglich.
+                        Diese Links werden nach ca. 1 Tag ungültig
                     </p>
                 </div>
             </div>
@@ -140,7 +140,7 @@ try {
         renewSharelink(document.getElementById("renew-share-link"));
 
         async function showNewShareLink(response) {
-            LINK_MAX_LENGTH = 30;
+            LINK_MAX_LENGTH = 37;
             await sleep(2000);
             full_link = "<?php echo $rootpath; ?>share.php?link=" + response.link;
             document.getElementById("share-link").innerHTML = full_link.slice(0, LINK_MAX_LENGTH) + "...";

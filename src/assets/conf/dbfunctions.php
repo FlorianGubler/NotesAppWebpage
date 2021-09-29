@@ -264,7 +264,7 @@ function sendConfirmEmail($receiver)
 
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= 'From: verify@promarks.ch' . "\r\n";
+    $headers .= 'From: verify@helsananotes.ch' . "\r\n";
     //$headers .= 'Reply-To: gubler.florian@gmx.net' . "\r\n";
     $headers .=  'X-Mailer: PHP/' . phpversion();
 

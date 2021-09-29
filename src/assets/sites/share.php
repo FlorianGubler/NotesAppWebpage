@@ -74,13 +74,13 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 $notessemester = array();
                 $endnotessemester = array();
                 foreach ($notes as $note) {
-                    if (!isset($notessemester[$note->semesterTag])) {
-                        $notessemester[$note->semesterTag] = array();
-                    }
-                    if (!isset($endnotessemester[$note->semesterTag])) {
-                        $endnotessemester[$note->semesterTag] = array();
-                    }
                     if ($note->schoolName == "BMS") {
+                        if (!isset($notessemester[$note->semesterTag])) {
+                            $notessemester[$note->semesterTag] = array();
+                        }
+                        if (!isset($endnotessemester[$note->semesterTag])) {
+                            $endnotessemester[$note->semesterTag] = array();
+                        }
                         if (!isset($notessemester[$note->semesterTag][$note->subjectName])) {
                             $notessemester[$note->semesterTag][$note->subjectName] = array();
                         }

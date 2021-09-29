@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include "../../config.php";
 $passwordfalse = false;
 $formfalse = false;
 
@@ -13,7 +13,7 @@ if (isset($_POST['submit-register'])) {
                 $message = str_replace("XXXXXXmailXXXXXX", $receiver, file_get_contents("dbapi/confirm_email_mailsite.html"));
                 $headers  = 'MIME-Version: 1.0' . "\r\n";
                 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                $headers .= 'From: verify@promarks.ch' . "\r\n";
+                $headers .= 'From: verify@helsananotes.ch' . "\r\n";
                 $headers .=  'X-Mailer: PHP/' . phpversion();
 
                 if (mail($receiver, $subject, $message, $headers)) {
@@ -35,13 +35,13 @@ if (isset($_POST['submit-register'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProMarks Registrierung</title>
-    <link rel="stylesheet" href="assets/css/register.css">
+    <title>Helsana Noten Registrierung</title>
+    <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/register.css">
 </head>
 
 <body>
     <form autocomplete="off" id="register-form" action="" method="POST">
-        <h1>ProMarks Registrierung</h1>
+        <h1>Helsana Noten Registrierung</h1>
 
         <input name="fname" placeholder="Max" required>
         <input name="lname" placeholder="Muster" required>

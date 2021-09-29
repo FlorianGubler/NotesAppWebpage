@@ -1,5 +1,5 @@
-body{
-    background-color: rgb(44, 43, 43);
+:root{
+    --hlsRot: #9a0941;
 }
 #register-form{
     position: absolute;
@@ -13,14 +13,14 @@ body{
 }
 h1{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: rgb(231, 231, 231);
+    color: var(--hlsRot);
     text-align: center;
 }
 #register-form input, #register-form button{
-    color: white;
+    color: rgb(77, 77, 77);
     margin: 10px;
     width: 50vw;
-    background-color: rgb(73, 69, 69);
+    background-color: rgb(235, 235, 235);
     border: 1px solid rgb(173, 173, 173);
     padding: 10px;
 }

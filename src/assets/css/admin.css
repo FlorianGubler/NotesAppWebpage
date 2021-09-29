@@ -8,6 +8,9 @@
     position: relative;
     width: 90%;
 }
+h1{
+    color: var(--hlsRot);
+}
 .input-content-container{
     display: flex;
     flex-direction: row;
@@ -65,33 +68,36 @@
     fill: red;
 }
 .input-content-container input{
-    color: rgb(163, 163, 163);
+    color: var(--hlsRot);
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    background-color: #323233;
+    background-color: #e2e2e2;
 }
 .input-content-container select{
-    color: rgb(163, 163, 163);
+    color: var(--hlsRot);
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     box-sizing: border-box;
-    background-color: #323233;
+    background-color: #e2e2e2;
+}
+.input-content-container select option{
+    color: #292a2b;
 }
 .input-content-container button{
-    color: rgb(163, 163, 163);
+    color: var(--hlsRot);
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     border: none;
     display: inline-block;
     box-sizing: border-box;
-    background-color: #323233;
+    background-color: #e2e2e2;
     cursor: pointer;
 }
 .input-content-container button:hover{
@@ -102,13 +108,14 @@
     color: rgb(163, 163, 163);
 }
 #user-list-table tr{
-    background-color: #292a2b;
+    background-color: var(--hlsRot);
 }
 #user-list-table tr:nth-child(even){
-    background-color: #3e444a;
+    background-color: var(--hlsRot);
+    opacity: 0.8;
 }
 #user-list-table th{
-    background-color: #3e444a;
+    background-color: var(--hlsRot);
 }
 #user-list-table td, #user-list-table th{
     padding: 5px;

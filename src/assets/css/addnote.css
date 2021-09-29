@@ -15,7 +15,8 @@ input, #select-subject, #select-semester, #selectOverSubject{
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  background-color: #323233;
+  background-color: rgb(255, 255, 255);
+  color: #333333;
 }
 input:focus{
     outline: none;
@@ -43,8 +44,8 @@ input:focus{
   display: none;
 }
 .modal button {
-  background-color: #616264;
-  color: white;
+  background-color: #dddddd;
+  color: var(--hlsRot);
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
@@ -79,7 +80,10 @@ span.psw {
   color: #9b9b9b;
 }
 optgroup{
-  color: #bebebe;
+  color: #333333;
+}
+option{
+  color: #555555;
 }
 .modal {
   display: block;
@@ -96,7 +100,7 @@ optgroup{
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #333435;
+  background-color: var(--hlsRot);
   margin: 75px auto 0 auto;
   border: 1px solid rgb(39, 39, 39);
   width: 50%;
@@ -122,4 +126,8 @@ optgroup{
   width: 100vw;
   height: 1px;
   background-color: #b9b9b9;
+}
+
+.footer-container{
+  background-color: #d8d8d8;
 }

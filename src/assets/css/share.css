@@ -1,5 +1,5 @@
-body {
-    background-color: #444444;
+:root{
+    --hlsRot: #9a0941;
 }
 .navigation{
     width: calc(100% - 10px);
@@ -13,6 +13,7 @@ body {
     margin-left: 10px;
     margin-right: 10px;
     border: 1px solid gray;
+    color: var(--hlsRot);
     border-radius: 5px;
     cursor: pointer;
 }
@@ -49,16 +50,20 @@ body {
     margin: 5px 0 22px 0;
     display: inline-block;
     border: none;
-    background: #adadad;
+    background: #d4d4d4;
     border-radius: 5px;
+    color: #535353;
 }
 
 #code-container button {
-    background-color: #2e2e2e;
-    color: white;
+    background-color: #ebebeb;
+    color: var(--hlsRot);
     padding: 16px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 106%;
+}
+#code-container button:hover{
+    opacity: 0.8;
 }

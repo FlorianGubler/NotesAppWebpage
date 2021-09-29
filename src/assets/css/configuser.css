@@ -15,14 +15,14 @@ input{
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  background-color: #323233;
+  background-color: #e4e4e4;
 }
 input:focus{
     outline: none;
 }
 .modal button {
-  background-color: #616264;
-  color: white;
+  background-color: #f3f3f3;
+  color: var(--hlsRot);
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
@@ -31,7 +31,7 @@ input:focus{
 }
 
 .modal button:hover {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 form{
@@ -62,6 +62,10 @@ img.avatar {
   padding: 25px;
 }
 
+.footer-container{
+  background-color: rgb(236, 236, 236) !important;
+}
+
 span.psw {
   margin-top: -5px;
   margin-right: -5px;
@@ -78,14 +82,13 @@ span.psw {
   width: 100%;
   height: calc(100vh - 32px);
   overflow: auto;
-  background-color: rgba(61, 61, 61, 0);
   padding-top: 10px;
 }
 
 .modal-content {
-  background-color: #333435;
+  background-color: var(--hlsRot);
   margin: 100px auto 10px auto;
-  border: 1px solid rgb(39, 39, 39);
+  border: 1px solid rgb(173, 173, 173);
   width: 50%;
 }
 
@@ -105,7 +108,7 @@ span.psw {
 }
 
 #upload-pb-container{
-  background-color: #242525;
+  background-color: var(--hlsRot);
   position: relative;
   animation: elementPopUp 0.5s ease forwards;
   position: absolute;
@@ -161,12 +164,20 @@ span.psw {
 }
 
 .upload-pb-inner-container button{
-  background-color: #616264;
-  color: white;
+  background-color: white;
+  color: var(--hlsRot);
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
+}
+
+#uploadpb_quit svg path{
+  fill: white !important;
+}
+
+.upload-pb-inner-container button svg path{
+  fill: var(--hlsRot);
 }
 
 .upload-pb-inner-container button:hover{
