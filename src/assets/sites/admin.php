@@ -1,5 +1,23 @@
 <?php
-include "navbar.php";
+require_once("../../config.php");
+
+$login = false;
+
+if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
+    $userdata = getUserData($_COOKIE["sessionkey"]);
+    if (hash("sha256", $userdata->username . $_SERVER["REMOTE_ADDR"]) == $_COOKIE["sessionid"]) {
+        $user = $userdata;
+        $login = true;
+    } else {
+        header("Location: " . $rootpath . "index.php?logout=true");
+    }
+} else {
+    header("Location: " . $rootpath . "index.php?logout=true");
+}
+
+if($user->admin != 1){
+    header("Location: " . $rootpath . "assets/sites/home.php");
+}
 
 if (isset($_POST["create-subject"])) {
     if (!isset($_POST["over-subject"])) {
@@ -19,6 +37,9 @@ if (isset($_POST["update-user-privileges"])) {
     header("Location: " . $_SERVER["PHP_SELF"]);
 }
 
+include "navbar.php";
+
+
 $additionalTags = getAdditionalTags();
 $subjects = getSubjects();
 $subjectsstruct = array();
@@ -29,7 +50,6 @@ foreach ($subjects as $subject) {
     array_push($subjectsstruct[$subject->schoolName], $subject);
 }
 ?>
-<link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/notes.css">
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/admin.css">
 <div class="content-title-bar-container">
     <h1>Administrator Tools</h1>

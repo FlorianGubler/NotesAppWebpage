@@ -5,14 +5,14 @@ $login = false;
 
 if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
     $userdata = getUserData($_COOKIE["sessionkey"]);
-    if ($userdata->username . $_SERVER["REMOTE_ADDR"] == $_COOKIE["sessionid"]) {
+    if (hash("sha256", $userdata->username . $_SERVER["REMOTE_ADDR"]) == $_COOKIE["sessionid"]) {
         $user = $userdata;
         $login = true;
     } else {
-        header("Location: " . $rootpath . "index.php");
+        header("Location: " . $rootpath . "index.php?logout=true");
     }
 } else {
-    header("Location: " . $rootpath . "index.php");
+    header("Location: " . $rootpath . "index.php?logout=true");
 }
 
 if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
@@ -20,11 +20,6 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
     exit;
 }
 
-try {
-    $firstbmssemester = urlencode(strtolower(str_replace(' ', '_', getNotes($user->id)[0]->semesterTag)));
-} catch (Exception $e) {
-    $firstbmssemester = "";
-}
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -35,7 +30,7 @@ try {
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
     <link src="<?php echo $rootpath; ?>assets/js/cropprjs/croppr.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" type="image/x-icon" href="../img/icon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath; ?>assets/img/icon.ico">
 
     <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
     <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
@@ -62,7 +57,7 @@ try {
         <div id="menu-splitline"></div>
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a id="bms-anchor" href="bms.php#<?php echo $firstbmssemester; ?>"><i class="fas fa-school"></i> BMS Notenstand</a></li>
+            <li><a id="bms-anchor" href="bms.php"><i class="fas fa-school"></i> BMS Notenstand</a></li>
             <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
             <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
@@ -131,7 +126,13 @@ try {
             const xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    showNewShareLink(JSON.parse(this.responseText));
+                    newsharelink = null;
+                    try {
+                        newsharelink = JSON.parse(this.responseText);
+                    } catch (e) {
+                        console.log(this.responseText);
+                    }
+                    showNewShareLink(newsharelink);
                 }
             };
             xhttp.open("GET", "<?php echo $_SERVER["PHP_SELF"]; ?>?action=renewsharelink");

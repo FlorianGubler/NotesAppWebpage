@@ -117,7 +117,7 @@ button:focus{
     font-size: 20px;
 }
 #menu-expand svg path{
-    fill: rgb(255, 255, 255);
+    fill: var(--hlsRot);
 }
 #menu-expand:focus{
     outline: none;
@@ -134,10 +134,10 @@ button:focus{
     border-radius: 100%;
     width: 40px;
     height: 40px;
-    background-color: rgb(116, 116, 116);
+    background-color: rgb(236, 236, 236);
     z-index: 999;
     box-sizing: border-box;
-    border: 1px solid #cfcfcf85;
+    border: 2px solid #cfcfcf85;
 }
 #site-title-container:hover{
     opacity: 0.7;
@@ -303,7 +303,7 @@ button:focus{
 
 .share-container h3{
     margin: 5px;
-    color: #2c2f31;
+    color: #969696;
 }
 
 .share-container label{

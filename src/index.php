@@ -1,6 +1,5 @@
 <?php
 include "config.php";
-
 $loginfailed = false;
 
 if (isset($_GET["logout"])) {
@@ -11,7 +10,7 @@ if (isset($_GET["logout"])) {
 
 if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
   $userdata = getUserData($_COOKIE["sessionkey"]);
-  if ($userdata != false && $userdata->username . $_SERVER["REMOTE_ADDR"] == $_COOKIE["sessionid"]) {
+  if ($userdata != false) {
     header("Location: " . $rootpath . "assets/sites/home.php");
   }
 }
@@ -20,15 +19,13 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
   $userCheck = checkLogin($_POST["uname"], $_POST["psw"]);
   if ($userCheck != false) {
     $user = getUserData($userCheck);
-    setcookie("sessionid", $user->username . $_SERVER["REMOTE_ADDR"]);
+    setcookie("sessionid", hash("sha256", $user->username . $_SERVER["REMOTE_ADDR"]));
     setcookie("sessionkey", $user->id);
     header("Location: " . $rootpath . "assets/sites/home.php");
-    $loginfailed = false;
   } else {
     $loginfailed = true;
   }
 }
-
 ?>
 <!doctype html>
 <html lang="de">

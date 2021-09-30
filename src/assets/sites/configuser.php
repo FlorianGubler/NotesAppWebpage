@@ -3,14 +3,14 @@ require_once("../../config.php");
 
 if (isset($_COOKIE["sessionkey"]) and isset($_COOKIE["sessionid"])) {
     $userdata = getUserData($_COOKIE["sessionkey"]);
-    if ($userdata->username . $_SERVER["REMOTE_ADDR"] == $_COOKIE["sessionid"]) {
+    if (hash("sha256", $userdata->username . $_SERVER["REMOTE_ADDR"]) == $_COOKIE["sessionid"]) {
         $user = $userdata;
         $login = true;
     } else {
-        header("Location: " . $rootpath . "index.php");
+        header("Location: " . $rootpath . "index.php?logout=true");
     }
 } else {
-    header("Location: " . $rootpath . "index.php");
+    header("Location: " . $rootpath . "index.php?logout=true");
 }
 
 $uploadstatus = null;

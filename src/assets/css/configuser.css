@@ -16,6 +16,7 @@ input{
   border: 1px solid #ccc;
   box-sizing: border-box;
   background-color: #e4e4e4;
+  color: #484d4d;
 }
 input:focus{
     outline: none;

@@ -3,11 +3,13 @@ function checkLogin($username, $password)
 {
     global $conn;
     require_once("obj/user.class.php");
-    $checkUserSQL = "SELECT * FROM users WHERE email='" . $username . "';";
-    $result = $conn->query($checkUserSQL);
-    $user = $result->fetch_assoc();
-    if (hash("sha256", $username . $password) == $user["passwordhash"]) {
-        return $user["id"];
+    $checkUserSQL = "SELECT * FROM root.users WHERE email=:text_username";
+    $stid = oci_parse($conn, $checkUserSQL);
+    oci_bind_by_name($stid, ":text_username", $username);
+    oci_execute($stid);
+    $user = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS);
+    if (hash("sha256", $username . $password) == $user["PASSWORDHASH"]) {
+        return $user["ID"];
     } else {
         return false;
     }
@@ -16,14 +18,18 @@ function checkLogin($username, $password)
 function getUserData($userid)
 {
     global $conn;
+
     require_once("obj/user.class.php");
-    $checkUserSQL = "SELECT * FROM users WHERE id='" . $userid . "';";
-    $result = $conn->query($checkUserSQL);
-    $user = $result->fetch_assoc();
-    if (mysqli_num_rows($result) == 0) {
+    $checkUserSQL = "SELECT * FROM root.users WHERE id=:id_user";
+    $stid = oci_parse($conn, $checkUserSQL);
+
+    oci_bind_by_name($stid, ":id_user", $userid);
+    oci_execute($stid);
+    $user = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS);
+    if (oci_num_rows($stid) == 0) {
         return false;
     }
-    return new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin'], $user['passwordhash']);
+    return new User($user['ID'], $user['USERNAME'], $user["EMAIL"], $user["EMAIL_CONFIRMED"], $user['PROFILEPICTURE'], $user['ADMIN'], $user['PASSWORDHASH']);
 }
 
 function getNotes($userid)
@@ -31,14 +37,14 @@ function getNotes($userid)
     require_once("obj/note.class.php");
     global $conn;
 
-    $userid = $conn->real_escape_string($userid);
-    $query = "SELECT notes.id, notes.value, notes.examName, notes.FK_subject, notes.FK_user, subjects.FK_school, notes.FK_semester, subjects.additionalTag, schools.schoolName, semesters.semesterTag, subjects.subjectName FROM notes JOIN subjects ON notes.FK_subject = subjects.id JOIN schools ON subjects.FK_school = schools.id LEFT JOIN semesters ON notes.FK_semester = semesters.id WHERE FK_user=" . $userid . ";";
-    $result = $conn->query($query);
+    $query = "SELECT n.id, n.value, n.examName, n.FK_subject, n.FK_user, su.FK_school, n.FK_semester, su.additionalTag, so.schoolName, se.semesterTag, su.subjectName FROM root.notes n JOIN root.subjects su ON n.FK_subject = su.id JOIN root.schools so ON su.FK_school = so.id LEFT JOIN root.semesters se ON n.FK_semester = se.id WHERE FK_user=:id_user";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":id_user", $userid);
+    oci_execute($stid);
     $notes = array();
-    while ($row = $result->fetch_assoc()) {
-        array_push($notes, new Note($row['id'], $row['value'], $row['examName'], $row['FK_subject'], $row['FK_user'], $row['FK_school'], $row['FK_semester'], $row['additionalTag'], $row['schoolName'], $row['semesterTag'], $row['subjectName']));
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($notes, new Note($row['ID'], floatval($row['VALUE']), $row['EXAMNAME'], $row['FK_SUBJECT'], $row['FK_USER'], $row['FK_SCHOOL'], $row['FK_SEMESTER'], $row['ADDITIONALTAG'], $row['SCHOOLNAME'], $row['SEMESTERTAG'], $row['SUBJECTNAME']));
     }
-
     return $notes;
 }
 function getSemesters()
@@ -46,13 +52,13 @@ function getSemesters()
     require_once("obj/semester.class.php");
     global $conn;
 
-    $query = "SELECT * FROM semesters;";
-    $result = $conn->query($query);
+    $query = "SELECT * FROM root.semesters";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
     $semesters = array();
-    while ($row = $result->fetch_assoc()) {
-        array_push($semesters, new Semester($row["id"], $row["semesterTag"]));
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($semesters, new Semester($row["ID"], $row["SEMESTERTAG"]));
     }
-
     return $semesters;
 }
 function getSchools()
@@ -60,11 +66,13 @@ function getSchools()
     require_once("obj/school.class.php");
     global $conn;
 
-    $query = "SELECT * FROM schools;";
-    $result = $conn->query($query);
+    $query = "SELECT * FROM root.schools";
+    $stid = oci_parse($conn, $query);
+
+    oci_execute($stid);
     $schools = array();
-    while ($row = $result->fetch_assoc()) {
-        array_push($schools, new School($row["id"], $row["schoolName"]));
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($schools, new School($row["ID"], $row["SCHOOLNAME"]));
     }
 
     return $schools;
@@ -73,22 +81,27 @@ function getSubjects()
 {
     require_once("obj/subject.class.php");
     global $conn;
-    $query = "SELECT s1.id, s1.FK_school, s1.additionalTag, schools.schoolName, s1.subjectName, s2.subjectName as 'overSubjectName' FROM subjects s1 JOIN schools ON s1.FK_school = schools.id LEFT JOIN subjects s2 ON s1.FK_overSubject = s2.id;";
-    $result = $conn->query($query);
+
+    $query = "SELECT s1.id, s1.FK_school, s1.additionalTag, schools.schoolName, s1.subjectName as SUBJECTNAME, s2.subjectName as OVERSUBJECTNAME FROM root.subjects s1 JOIN root.schools ON s1.FK_school = schools.id LEFT JOIN root.subjects s2 ON s1.FK_overSubject = s2.id";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
     $subjects = array();
-    while ($row = $result->fetch_assoc()) {
-        array_push($subjects, new Subject($row["id"], $row["FK_school"], $row["additionalTag"], $row["schoolName"], $row["subjectName"], $row["overSubjectName"]));
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($subjects, new Subject($row["ID"], $row["FK_SCHOOL"], $row["ADDITIONALTAG"], $row["SCHOOLNAME"], $row["SUBJECTNAME"], $row["OVERSUBJECTNAME"]));
     }
     return $subjects;
 }
 function getAdditionalTags()
 {
     global $conn;
-    $query = "SELECT DISTINCT additionalTag FROM subjects";
-    $result = $conn->query($query);
+
+    $query = "SELECT DISTINCT additionalTag FROM root.subjects";
+    $stid = oci_parse($conn, $query);
+
+    oci_execute($stid);
     $additionalTags = array();
-    while ($row = $result->fetch_assoc()) {
-        array_push($additionalTags, $row["additionalTag"]);
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($additionalTags, $row["ADDITIONALTAG"]);
     }
     return $additionalTags;
 }
@@ -112,7 +125,20 @@ function getSubjectsFromName($searchname)
     }
     return false;
 }
+function GetNextIDFromSessionLinks()
+{
+    global $conn;
 
+    $query = "SELECT MAX(ID) + 1 as maxid FROM root.session_links";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
 function GetShareLink($userid)
 {
     global $conn;
@@ -120,8 +146,14 @@ function GetShareLink($userid)
     $token = random_int(100000, 999999);
     $link = hash("sha256", $userid . uniqid("", true));
 
-    $sql = "INSERT INTO session_links (FK_user, link, token) VALUES ($userid, '$link', $token); ";
-    $conn->query($sql);
+    $query = "INSERT INTO root.session_links (ID, FK_user, link, token) VALUES (:new_id, :id_user, :newlink, :newtoken)";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":id_user", $userid);
+    oci_bind_by_name($stid, ":newlink", $link);
+    $newid = GetNextIDFromSessionLinks();
+    oci_bind_by_name($stid, ":new_id", $newid);
+    oci_bind_by_name($stid, ":newtoken", $token);
+    oci_execute($stid);
 
     $returnvalue = new stdClass();
     $returnvalue->link = $link;
@@ -134,11 +166,17 @@ function getStickyNotes($userid)
 {
     require_once("obj/stickynotes.class.php");
     global $conn;
-    $sql = "SELECT stickynotes.PK_stickynote, DATE_FORMAT(stickynotes.createtime, '%d.%m.%Y - %H:%i') AS createtime, stickynotes.title FROM stickynotes WHERE FK_user=" . $userid . ";";
-    $qry = $conn->query($sql);
+
+
+    $query = "SELECT stickynotes.PK_stickynote, TO_CHAR(stickynotes.createtime, 'dd.mm.yyyy - hh24:mi') AS createtime, stickynotes.title FROM root.stickynotes WHERE FK_user=:id_user";
+    $stid = oci_parse($conn, $query);
+
+    oci_bind_by_name($stid, ":id_user", $userid);
+    oci_execute($stid);
+
     $stickynotes = array();
-    while ($row = $qry->fetch_assoc()) {
-        array_push($stickynotes, new StickyNotes($row["PK_stickynote"], $row["createtime"], $row["title"]));
+    while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($stickynotes, new StickyNotes($row["PK_STICKYNOTE"], $row["CREATETIME"], $row["TITLE"]));
     }
     return $stickynotes;
 }
@@ -146,12 +184,18 @@ function getStickyNotes($userid)
 function getStickyNotesVal($PK_stickyNote)
 {
     global $conn;
-    $sql = "SELECT stickynotes.PK_stickynote, stickynotes.value FROM stickynotes WHERE PK_stickynote = $PK_stickyNote;";
-    $qry = $conn->query($sql);
-    $result = $qry->fetch_assoc();
+
+
+    $query = "SELECT stickynotes.PK_stickynote, stickynotes.value FROM root.stickynotes WHERE PK_stickynote = :id_stickynote";
+    $stid = oci_parse($conn, $query);
+
+    oci_bind_by_name($stid, ":id_stickynote", $PK_stickyNote);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS);
     $stickynoteval = new stdClass();
-    $stickynoteval->PK_stickynote = $result["PK_stickynote"];
-    $stickynoteval->value = $result["value"];
+    $stickynoteval->PK_stickynote = $result["PK_STICKYNOTE"];
+    $stickynoteval->value = $result["VALUE"];
     return $stickynoteval;
 }
 
@@ -159,22 +203,43 @@ function saveStickyNote($stickynoteid, $newvalue)
 {
     global $conn;
 
-    $newvalue = $conn->real_escape_string($newvalue);
-    $query = "UPDATE stickynotes SET value='" . $newvalue . "' WHERE PK_stickynote=" . $stickynoteid . ";";
-    return $conn->query($query);
-}
 
+    $query = "UPDATE root.stickynotes SET value=:newvalue WHERE PK_stickynote=:id_stickynote";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":id_stickynote", $stickynoteid);
+    oci_bind_by_name($stid, ":newvalue", $newvalue);
+
+
+    return oci_execute($stid);
+}
+function GetNextIDFromStickyNote()
+{
+    global $conn;
+
+    $query = "SELECT MAX(PK_STICKYNOTE) + 1 as maxid FROM root.stickynotes";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
 function createStickyNote($title, $value = "", $userid)
 {
     global $conn;
 
-    $title = $conn->real_escape_string($title);
-    $value = $conn->real_escape_string($value);
-
     //Escape Notes attributes
-    $query = "INSERT INTO stickynotes (title, value, FK_user) VALUES ('" . $title . "', '" . $value . "', $userid);";
+    $query = "INSERT INTO root.stickynotes (PK_STICKYNOTE, title, value, FK_user) VALUES (:new_id, :stickynotetitle, :stickynotevalue, :id_user)";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":id_user", $userid);
+    $newid = GetNextIDFromStickyNote();
+    oci_bind_by_name($stid, ":new_id", $newid);
+    oci_bind_by_name($stid, ":stickynotetitle", $title);
+    oci_bind_by_name($stid, ":stickynotevalue", $title);
 
-    if (!$conn->query($query)) {
+    if (!oci_execute($stid)) {
         return false;
     }
 }
@@ -183,12 +248,13 @@ function ChangeStickyNoteTitle($stickynoteID, $newTitle)
 {
     global $conn;
 
-    $newTitle = $conn->real_escape_string($newTitle);
-    $stickynoteID = $conn->real_escape_string($stickynoteID);
+    $query = "UPDATE root.stickynotes SET title = :newtitle WHERE PK_stickynote = :id_stickynote";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":newtitle", $newTitle);
+    oci_bind_by_name($stid, ":id_stickynote", $stickynoteID);
 
-    $query = "UPDATE stickynotes SET title = '$newTitle' WHERE PK_stickynote = $stickynoteID";
 
-    if (!$conn->query($query)) {
+    if (!oci_execute($stid)) {
         return false;
     }
 }
@@ -196,23 +262,44 @@ function ChangeStickyNoteTitle($stickynoteID, $newTitle)
 function deleteStickyNote($PK_stickynote)
 {
     global $conn;
-
     //Escape Notes attributes
-    $query = "DELETE FROM stickynotes WHERE PK_stickynote = '" . $PK_stickynote . "';";
+    $query = "DELETE FROM root.stickynotes WHERE PK_stickynote = :id_stickynote";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":id_stickynote", $PK_stickynote);
 
-    if (!$conn->query($query)) {
+    if (!oci_execute($stid)) {
         return false;
     }
 }
-
-function uploadNote($note)
+function GetNextIDFromNotes()
 {
     global $conn;
 
-    //Escape Notes attributes
-    $query = "INSERT INTO notes (value, examName, FK_subject, FK_user, FK_semester) VALUES (" . $note->value . ", '" . $note->examName . "', " . $note->FK_subject . ", " . $note->FK_user . ", " . $note->FK_semester . ");";
+    $query = "SELECT MAX(ID) + 1 as maxid FROM root.notes";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
 
-    if (!$conn->query($query)) {
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
+function uploadNote($note)
+{
+    global $conn;
+    //Escape Notes attributes
+    $query = "INSERT INTO root.notes n (n.ID, n.value, n.examName, n.FK_subject, n.FK_user, n.FK_semester) VALUES (:nextid, :note_value, :note_examname, :id_subject, :id_user, :id_semester)";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":note_value", $note->value);
+    oci_bind_by_name($stid, ":note_examname", $note->examName);
+    $nextid = GetNextIDFromNotes();
+    oci_bind_by_name($stid, ":nextid", $nextid);
+    oci_bind_by_name($stid, ":id_subject", $note->FK_subject);
+    oci_bind_by_name($stid, ":id_user", $note->FK_user);
+    oci_bind_by_name($stid, ":id_semester", $note->FK_semester);
+
+    if (!oci_execute($stid)) {
         return false;
     }
 }
@@ -222,10 +309,15 @@ function setUsername($user, $newusername, $password)
 {
     global $conn;
 
+
     if ($user->passwordhash == hash("sha256", $user->email . $password)) {
-        $newusername = $conn->real_escape_string($newusername);
-        $query = "UPDATE users SET username='" . $newusername . "' WHERE id=" . $user->id . ";";
-        $conn->query($query);
+        $query = "UPDATE root.users SET username=:newusername WHERE id=:id_user";
+        $stid = oci_parse($conn, $query);
+        oci_bind_by_name($stid, ":newusername", $newusername);
+        oci_bind_by_name($stid, ":id_user", $user->id);
+
+
+        oci_execute($stid);
     } else {
         return false;
     }
@@ -236,13 +328,19 @@ function setEmail($user, $newemail, $password)
 {
     global $conn;
 
+
     if ($user->passwordhash == hash("sha256", $user->email . $password)) {
         $updatedPsw = hash("sha256", $newemail . $password);
 
-        $newemail = $conn->real_escape_string($newemail);
-        $query = "UPDATE users SET email='" . $newemail . "', email_confirmed = 0, passwordhash='" . $updatedPsw . "' WHERE id=" . $user->id . ";";
+        $query = "UPDATE root.users SET email=:newemail, email_confirmed = 0, passwordhash=:newpsw WHERE id=:id_user";
 
-        $conn->query($query);
+        $stid = oci_parse($conn, $query);
+        oci_bind_by_name($stid, ":newpsw", $updatedPsw);
+        oci_bind_by_name($stid, ":newemail", $newemail);
+        oci_bind_by_name($stid, ":id_user", $user->id);
+
+
+        oci_execute($stid);
 
         if (!sendConfirmEmail($newemail)) {
             return false;
@@ -255,7 +353,7 @@ function setEmail($user, $newemail, $password)
 
 function sendConfirmEmail($receiver)
 {
-    return true;
+    return true; //Email Server does not exist
     global $rootpath;
     $subject = 'Confirm Your Email';
     $message = file_get_contents("confirm_email_mailsite.html", true);
@@ -276,69 +374,129 @@ function sendConfirmEmail($receiver)
 function setPassword($user, $oldpassword, $newpassword)
 {
     global $conn;
+
+
     if ($user->passwordhash == hash("sha256", $user->email . $oldpassword)) {
         $updatedPsw = hash("sha256", $user->email . $newpassword);
-        $query = "UPDATE users SET passwordhash='" . $updatedPsw . "' WHERE id=" . $user->id . ";";
-        $conn->query($query);
+        $query = "UPDATE root.users SET passwordhash=:newpsw WHERE id=:id_user";
+        $stid = oci_parse($conn, $query);
+        oci_bind_by_name($stid, ":newpsw", $updatedPsw);
+        oci_bind_by_name($stid, ":id_user", $user->id);
+
+
+        oci_execute($stid);
     } else {
         return false;
     }
     return true;
 }
+function GetNextIDFromSubjects()
+{
+    global $conn;
 
+    $query = "SELECT MAX(ID) + 1 as maxid FROM root.subjects";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
 function AdminTools_CreateSubject($subjectName, $FK_school, $addtionalTag, $overSubject)
 {
     global $conn;
+    $nextid = GetNextIDFromSubjects();
     if ($addtionalTag == "") {
         if ($overSubject == "") {
-            $sql = "INSERT INTO subjects (subjectName, FK_school) VALUES ('$subjectName', $FK_school);";
+            $query = "INSERT INTO root.subjects (ID, subjectName, FK_school) VALUES (:nextid, :subjectname, :id_school)";
+            $stid = oci_parse($conn, $query);
         } else {
-            $sql = "INSERT INTO subjects (subjectName, FK_school, FK_overSubject) VALUES ('$subjectName', $FK_school, $overSubject);";
+            $query = "INSERT INTO root.subjects (ID, subjectName, FK_school, FK_overSubject) VALUES (:nextid, :subjectname, :id_school, :id_overSubject)";
+            $stid = oci_parse($conn, $query);
+            oci_bind_by_name($stid, ":id_overSubject", $overSubject);
         }
     } else {
         if ($overSubject == "") {
-            $sql = "INSERT INTO subjects (subjectName, FK_school, additionalTag) VALUES ('$subjectName', $FK_school, '$addtionalTag');";
+            $query = "INSERT INTO root.subjects (ID, subjectName, FK_school, additionalTag) VALUES (:nextid, :subjectname, :id_school, :additionalTag)";
+            $stid = oci_parse($conn, $query);
+            oci_bind_by_name($stid, ":additionalTag", $additionalTag);
         } else {
-            $sql = "INSERT INTO subjects (subjectName, FK_school, additionalTag, FK_overSubject) VALUES ('$subjectName', $FK_school, '$addtionalTag', $overSubject);";
+            $query = "INSERT INTO root.subjects (ID, subjectName, FK_school, additionalTag, FK_overSubject) VALUES (:nextid, :subjectname, :id_school, :additionalTag, :id_overSubject)";
+            $stid = oci_parse($conn, $query);
+            oci_bind_by_name($stid, ":id_overSubject", $overSubject);
+            oci_bind_by_name($stid, ":additionalTag", $additionalTag);
         }
     }
-    $conn->query($sql);
-}
+    oci_bind_by_name($stid, ":subjectname", $subjectName);
+    oci_bind_by_name($stid, ":id_school", $FK_school);
+    oci_bind_by_name($stid, ":nextid", $nextid);
 
+    oci_execute($stid);
+}
+function GetNextIDFromSemesters()
+{
+    global $conn;
+
+    $query = "SELECT MAX(ID) + 1 as maxid FROM root.semesters";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
 function AdminTools_CreateSemester($semesterTag)
 {
     global $conn;
-    $sql = "INSERT INTO semesters (semesterTag) VALUES ('$semesterTag');";
-    $conn->query($sql);
+
+    $query = "INSERT INTO root.semesters (ID, semesterTag) VALUES (:nextid, :semester)";
+    $stid = oci_parse($conn, $query);
+    $nextid = GetNextIDFromSemesters();
+    oci_bind_by_name($stid, ":nextid", $nextid);
+    oci_bind_by_name($stid, ":semester", $semesterTag);
+    oci_execute($stid);
 }
 
 function AdminTools_ChangeuserPrivileges($userID, $newPrivilege)
 {
     global $conn;
-    $sql = "UPDATE users SET admin=$newPrivilege WHERE id=$userID;";
-    $conn->query($sql);
+    $query = "UPDATE root.users SET admin=:newprivilege WHERE id=:id_user";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":newprivilege", $newPrivilege);
+    oci_bind_by_name($stid, ":id_user", $userID);
+
+
+    oci_execute($stid);
 }
 
 function AdminTools_GetUserList()
 {
     global $conn;
-    require_once("obj/user.class.php");
-    $sql = "SELECT * FROM users";
-    $qry = $conn->query($sql);
-    $users = array();
 
-    while ($user = $qry->fetch_assoc()) {
-        array_push($users, new User($user['id'], $user['username'], $user["email"], $user["email_confirmed"], $user['profilepicture'], $user['admin'], $user['passwordhash']));
+
+    require_once("obj/user.class.php");
+    $query = "SELECT * FROM root.users";
+    $stid = oci_parse($conn, $query);
+
+    oci_execute($stid);
+    $users = array();
+    while ($user = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
+        array_push($users, new User($user['ID'], $user['USERNAME'], $user["EMAIL"], $user["EMAIL_CONFIRMED"], $user['PROFILEPICTURE'], $user['ADMIN'], $user['PASSWORDHASH']));
     }
     return $users;
 }
 function uploadPB($userid, $uploadpbfile, $uploadpbdata)
 {
     global $conn;
+
+
     //generate Filename
     $target_dir = "../img/profilepictures/";
     $filecount = count(scandir($target_dir)) - 1;
-    file_put_contents("../loging.txt", $filecount);
     $newfilename = "profilepicture_" . ($filecount) . "." . explode(".", $uploadpbfile["name"])[count(explode(".", $uploadpbfile["name"])) - 1];
     $target_file = $target_dir . $newfilename;
     $uploadOk = 1;
@@ -379,13 +537,23 @@ function uploadPB($userid, $uploadpbfile, $uploadpbdata)
             } while (true);
 
             //Delete old File
-            $oldimg = $conn->query("SELECT profilepicture FROM users WHERE id=" . $userid . ";")->fetch_assoc()["profilepicture"];
+            $query = "SELECT profilepicture FROM root.users WHERE id=:id_user";
+            $stid = oci_parse($conn, $query);
+            oci_bind_by_name($stid, ":id_user", $userid);
+            oci_execute($stid);
+            $oldimg = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["PROFILEPICTURE"];
+
             if ($oldimg != "defaultpb.jpg" && file_exists($target_dir . $oldimg)) {
                 unlink($target_dir . $oldimg);
             }
 
             //Set New File
-            $conn->query("UPDATE users SET profilepicture='" . $newfilename . "' WHERE id=" . $userid . ";");
+            $query = "UPDATE root.users SET profilepicture=:newfilename WHERE id=:id_user";
+            $stid = oci_parse($conn, $query);
+            oci_bind_by_name($stid, ":id_user", $userid);
+            oci_bind_by_name($stid, ":newfilename", $newfilename);
+
+            oci_execute($stid);
 
             //Crop Image
             $image_data = json_decode($uploadpbdata);

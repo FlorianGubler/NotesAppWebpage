@@ -46,7 +46,7 @@ if (isset($_POST["upload-note"])) {
         ?>
       </select>
       <input name="examTag" type="text" placeholder="Prüfungsname" required>
-      <input name="note" type="number" step="0.001" placeholder="Note" required>
+      <input name="note" type="number" step="0.001" max="6" min="1" placeholder="Note" required>
       <button type="submit" name="upload-note">Note hochladen</button>
       <p style='background-color: red; display: none;' id='login-response-false'>Etwas hat nicht geklappt :(</p>
       <p style='background-color: #4ada26; color: #404142;display: none;' id='login-response-true'>Note erfolgreich hochgeladen :)</p>

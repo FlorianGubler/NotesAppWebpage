@@ -155,6 +155,9 @@ h1{
 .ce-toolbox{
     left: 45px;
 }
+.cdx-block{
+    color: #242525;
+}
 .ce-toolbox__button svg path{
     fill: #242525;
 }
