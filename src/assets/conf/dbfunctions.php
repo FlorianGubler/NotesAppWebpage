@@ -43,7 +43,7 @@ function getNotes($userid)
     oci_execute($stid);
     $notes = array();
     while ($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) {
-        array_push($notes, new Note($row['ID'], floatval($row['VALUE']), $row['EXAMNAME'], $row['FK_SUBJECT'], $row['FK_USER'], $row['FK_SCHOOL'], $row['FK_SEMESTER'], $row['ADDITIONALTAG'], $row['SCHOOLNAME'], $row['SEMESTERTAG'], $row['SUBJECTNAME']));
+        array_push($notes, new Note($row['ID'], $row['VALUE'], $row['EXAMNAME'], $row['FK_SUBJECT'], $row['FK_USER'], $row['FK_SCHOOL'], $row['FK_SEMESTER'], $row['ADDITIONALTAG'], $row['SCHOOLNAME'], $row['SEMESTERTAG'], $row['SUBJECTNAME']));
     }
     return $notes;
 }
