@@ -4,27 +4,14 @@ include "../../config.php";
 $checklogin = true;
 $invalid_sessionLink = false;
 
-function checkSessionLink($link, $token)
-{
-    global $conn;
-
-    $query = "SELECT * FROM session_links JOIN users ON FK_user = users.id WHERE link='$link' AND token=$token;";
-    $result = $conn->query($query);
-    if ($result->num_rows == 0) {
-        return false;
-    } else {
-        return $result->fetch_assoc();
-    }
-}
-
 if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link'])) {
     $sessionLink = checkSessionLink($_GET["link"], $_POST["token"]);
     if ($sessionLink != false) {
         $semesters = getSemesters();
         $schools = getSchools();
         $subjects = getSubjects();
-        $notes = getNotes($sessionLink["FK_user"]);
-        $user = getUserData($sessionLink["FK_user"]);
+        $notes = getNotes($sessionLink["FK_USER"]);
+        $user = getUserData($sessionLink["FK_USER"]);
     } else {
         $checklogin = false;
         $invalid_sessionLink = true;
@@ -90,6 +77,19 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                         array_push($notessemester[$note->semesterTag][$note->subjectName], $note);
                     }
                 }
+
+                function checkifOverSubjectsExist($subjectname)
+                {
+                    global $notessemester;
+                    foreach ($notessemester as $semester) {
+                        foreach ($semester as $subject => $subjectnotes) {
+                            if ($subject == $subjectname) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
                 ?>
                 <div id="top-bar-gui">
                     <h1 id="title-home">BMS Notentabelle</h1>
@@ -139,29 +139,42 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                                 <?php
                                 $semesternotescount = 0;
                                 foreach ($endnotessemester[$semester] as $subject => $endnotesubject) {
+                                    if (getSubjectsFromName($subject) != false) {
+                                        $overSubject = getSubjectsFromName($subject)->overSubject;
+                                        if ($overSubject != null) {
+                                            $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
+                                            if (!checkifOverSubjectsExist($overSubject) || !isset($endnotessemester[$semester][$overSubject])) {
+                                                $endnotessemester[$semester][$overSubject] = 0;
+                                                $endnotessemester[$semester][$overSubject . "_count"] = 0;
+                                            }
+                                            $endnotessemester[$semester][$overSubject . "_count"] += 1;
+                                            $endnotessemester[$semester][$overSubject] += $endnotesubject;
+                                            if (!checkifOverSubjectsExist($overSubject)) {
+                                                $endnotessemester[$semester][$overSubject] /= $endnotessemester[$semester][$overSubject . "_count"];
+                                            }
+                                            unset($endnotessemester[$semester][$subject]);
+                                        }
+                                    }
+                                }
+                                foreach ($endnotessemester[$semester] as $subject => $endnotesubject) {
                                     if ($subject != "endnote") {
                                         if (getSubjectsFromName($subject) != false) {
                                             $overSubject = getSubjectsFromName($subject)->overSubject;
-                                            if ($overSubject != null) {
-                                                $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
-                                                $endnotessemester[$semester][$overSubject] += $endnotesubject;
-                                                $endnotessemester[$semester][$overSubject] /= $endnotessemester[$semester][$overSubject . "_count"];
-                                                unset($endnotessemester[$semester][$subject]);
-                                            } else {
-                                                $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
-                                                $endnotesubject = round($endnotesubject * 2) / 2;
-                                                $endnotessemester[$semester]['endnote'] += $endnotesubject;
-                                                $semesternotescount++;
-                                                echo "<tr>";
-                                                echo "<th>$subject</th>";
-                                                if ($endnotesubject > 4) {
-                                                    $notestateclass = "grade-good";
-                                                } else if ($endnotesubject < 4 && $endnotesubject != 0) {
-                                                    $notestateclass = "grade-bad";
-                                                }
-                                                echo "<td class='$notestateclass'>$endnotesubject</td>";
-                                                echo "</tr>";
+                                            if ($overSubject = null) {
                                             }
+                                            $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
+                                            $endnotesubject = round($endnotesubject * 2) / 2;
+                                            $endnotessemester[$semester]['endnote'] += $endnotesubject;
+                                            $semesternotescount++;
+                                            echo "<tr>";
+                                            echo "<th>$subject</th>";
+                                            if ($endnotesubject > 4) {
+                                                $notestateclass = "grade-good";
+                                            } else if ($endnotesubject < 4 && $endnotesubject != 0) {
+                                                $notestateclass = "grade-bad";
+                                            }
+                                            echo "<td class='$notestateclass'>$endnotesubject</td>";
+                                            echo "</tr>";
                                         }
                                     }
                                 }

@@ -1,4 +1,32 @@
 <?php
+function GetNextIDFromUsers()
+{
+    global $conn;
+
+    $query = "SELECT MAX(ID) + 1 as maxid FROM root.users";
+    $stid = oci_parse($conn, $query);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)["MAXID"];
+    if ($result == 0 or $result == null) {
+        $result = 1;
+    }
+    return $result;
+}
+function createUser($username, $email, $password)
+{
+    global $conn;
+
+    $query = "INSERT INTO root.users (ID, username, email, passwordhash) VALUES (:new_id, :username, :email, :passwordhash)";
+    $stid = oci_parse($conn, $query);
+    $new_id = GetNextIDFromUsers();
+    oci_bind_by_name($stid, ":new_id", $new_id);
+    oci_bind_by_name($stid, ":username", $username);
+    oci_bind_by_name($stid, ":email", $email);
+    $passwordhash = hash('sha256', $_POST['email'] . $password);
+    oci_bind_by_name($stid, ":passwordhash", $passwordhash);
+    return oci_execute($stid);
+}
 function checkLogin($username, $password)
 {
     global $conn;
@@ -160,6 +188,23 @@ function GetShareLink($userid)
     $returnvalue->token = $token;
 
     return $returnvalue;
+}
+function checkSessionLink($link, $token)
+{
+    global $conn;
+
+    $query = "SELECT * FROM root.session_links JOIN root.users ON FK_user = users.id WHERE link=:link AND token=:token";
+    $stid = oci_parse($conn, $query);
+    oci_bind_by_name($stid, ":link", $link);
+    oci_bind_by_name($stid, ":token", $token);
+    oci_execute($stid);
+
+    $result = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS);
+    if (oci_num_rows($stid) == 0) {
+        return false;
+    } else {
+        return $result;
+    }
 }
 
 function getStickyNotes($userid)
@@ -338,13 +383,7 @@ function setEmail($user, $newemail, $password)
         oci_bind_by_name($stid, ":newpsw", $updatedPsw);
         oci_bind_by_name($stid, ":newemail", $newemail);
         oci_bind_by_name($stid, ":id_user", $user->id);
-
-
         oci_execute($stid);
-
-        if (!sendConfirmEmail($newemail)) {
-            return false;
-        }
     } else {
         return false;
     }

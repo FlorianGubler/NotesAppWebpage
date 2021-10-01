@@ -31,7 +31,6 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
 <html lang="de">
 
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
   <link rel="stylesheet" href="<?php echo $rootpath ?>assets/css/login.css" type="text/css">
   <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath ?>assets/img/icon.ico">
   <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
@@ -61,7 +60,7 @@ if (isset($_POST["login"]) and !empty($_POST["uname"]) and !empty($_POST["psw"])
       </div>
 
       <div class="container footer-container">
-        <span class="psw"><a style="color: rgb(103, 103, 216); cursor: pointer;" href="<?php echo $rootpath ?>assets/sites/register.php">Registrieren</a></span>
+        <span class="psw"><a class="registerlink" href="<?php echo $rootpath ?>assets/sites/register.php">Registrieren</a></span>
       </div>
     </form>
   </div>

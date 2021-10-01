@@ -227,7 +227,7 @@ CREATE TABLE root.users  (
    id number NOT NULL,
    username  varchar(100)   NOT NULL,
    email  varchar(255)   NOT NULL,
-   email_confirmed number(1) DEFAULT 0 NOT NULL,
+   email_confirmed number(1) DEFAULT 1 NOT NULL,
    passwordhash  varchar(1000) NOT NULL,
    profilepicture  varchar(100)  DEFAULT 'defaultpb.jpg' NOT NULL,
    admin number(1) DEFAULT 0 NOT NULL

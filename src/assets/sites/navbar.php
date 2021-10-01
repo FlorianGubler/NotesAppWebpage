@@ -33,7 +33,6 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo $rootpath; ?>assets/img/icon.ico">
 
     <script src="<?php echo $rootpath ?>assets/js/fontawesome/all.js" data-auto-replace-svg></script> <!-- Fontawesome -->
-    <script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
     <script src="<?php echo $rootpath; ?>assets/js/copy.js"></script>
     <title>Helsana Noten</title>
 </head>
@@ -70,7 +69,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
             ?>
             <li><a href="<?php echo $rootpath; ?>index.php?logout=true" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
-        <div class="copyright-nav" style="cursor: pointer;" onclick='window.api.send("toMain", JSON.stringify({ type: "Window", cmd: "OpenExternal", attributes: JSON.stringify("https://dekinotu.myhostpoint.ch/notes/") }))'>
+        <div class="copyright-nav" style="cursor: pointer;">
             <img src="<?php echo $rootpath ?>assets/img/icon.png">
             <p>&copy; by Florian Gubler 2021 ZLI BLJ</p>
         </div>

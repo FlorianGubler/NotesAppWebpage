@@ -42,12 +42,10 @@ require_once("navbar.php");
 $stickynotes = getStickyNotes($user->id);
 
 ?>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
+<script src="<?php echo $rootpath ?>assets/js/editorjs/editor.js"></script>
+<script src="<?php echo $rootpath ?>assets/js/editorjs/editor_header.js"></script>
+<script src="<?php echo $rootpath ?>assets/js/editorjs/editor_list.js"></script>
+<script src="<?php echo $rootpath ?>assets/js/editorjs/editor_table.js"></script>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/stickynotes.css">
 <div class="content-title-bar-container">
     <div style="display: inherit;">
@@ -169,8 +167,6 @@ if (count($stickynotes) == 0) {
                     tools: {
                         header: Header,
                         list: List,
-                        embed: Embed,
-                        image: SimpleImage,
                         table: Table
                     },
                     holder: 'editorjs',

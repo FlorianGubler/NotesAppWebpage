@@ -64,7 +64,7 @@ include "navbar.php";
 <div id="configuser" class="modal">
     <div class="modal-content animate">
         <div class="imgcontainer">
-            <img id="profile-pic" src="<?php echo $rootpath . "assets/img/profilepictures/" . $user->profilepicture; ?>" alt="Avatar" class="avatar" draggable="false" onerror="this.src = 'https://dekinotu.myhostpoint.ch/notes/assets/profilepictures/defaultpb.jpg';">
+            <img id="profile-pic" src="<?php echo $rootpath . "assets/img/profilepictures/" . $user->profilepicture; ?>" alt="Avatar" class="avatar" draggable="false" onerror="this.src = '<?php echo $rootpath ?>assets/img/profilepictures/defaultpb.jpg">
             <button class="upload-pb-select-picture" type="button" onclick="document.getElementById('pb-upload-hidden').click();"><i class="fas fa-pencil-alt"></i> Bearbeiten</button>
             <form action="" method="POST" id="upload-new-pb-form" enctype="multipart/form-data">
                 <input type="file" name="upload-new-pb" id="pb-upload-hidden" onchange="loadPreviewPB();">

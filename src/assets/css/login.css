@@ -59,8 +59,7 @@ img.avatar {
 }
 
 .footer-container{
-  background-color: rgb(255, 255, 255);
-
+  background-color: var(--hlsRot);
 }
 
 span.psw {
@@ -70,7 +69,7 @@ span.psw {
 
 .psw a{
   padding-top: 10px;
-  color: rgb(180, 180, 180);
+  color: white;
 }
 
 #titlebar{

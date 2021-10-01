@@ -7,7 +7,6 @@ oci_execute($ex);
 
 $oracle_user = "root";
 
-//$rootpath = "https://dekinotu.myhostpoint.ch/notes/";
 $rootpath = "\\";
 
 require_once("assets/conf/dbfunctions.php");
