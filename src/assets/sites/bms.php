@@ -23,6 +23,18 @@ foreach ($notes as $note) {
         array_push($notessemester[$note->semesterTag][$note->subjectName], $note);
     }
 }
+function checkifOverSubjectsExist($subjectname)
+{
+    global $notessemester;
+    foreach ($notessemester as $semester) {
+        foreach ($semester as $subject => $subjectnotes) {
+            if ($subject == $subjectname) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 ?>
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/bms.css">
 <div id="top-bar-gui">
@@ -77,12 +89,15 @@ foreach ($notes as $note) {
                         $overSubject = getSubjectsFromName($subject)->overSubject;
                         if ($overSubject != null) {
                             $endnotesubject /= $endnotessemester[$semester][$subject . "_count"];
-                            if (!isset($endnotessemester[$semester][$overSubject])) {
+                            if (!checkifOverSubjectsExist($overSubject) || !isset($endnotessemester[$semester][$overSubject])) {
                                 $endnotessemester[$semester][$overSubject] = 0;
-                                $endnotessemester[$semester][$overSubject . "_count"] = 1;
+                                $endnotessemester[$semester][$overSubject . "_count"] = 0;
                             }
+                            $endnotessemester[$semester][$overSubject . "_count"] += 1;
                             $endnotessemester[$semester][$overSubject] += $endnotesubject;
-                            $endnotessemester[$semester][$overSubject] /= $endnotessemester[$semester][$overSubject . "_count"];
+                            if (!checkifOverSubjectsExist($overSubject)) {
+                                $endnotessemester[$semester][$overSubject] /= $endnotessemester[$semester][$overSubject . "_count"];
+                            }
                             unset($endnotessemester[$semester][$subject]);
                         }
                     }
