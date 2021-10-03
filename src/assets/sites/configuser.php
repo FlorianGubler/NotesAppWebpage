@@ -24,7 +24,8 @@ if (isset($_POST["submit-paswd"])) {
     $uploadstatus = setPassword($user, $_POST["oldpassword"], $_POST["newpassword"]);
 }
 if (isset($_FILES["upload-new-pb"])) {
-    $uploadstatus = uploadPB($user->id, $_FILES["upload-new-pb"], $_POST["upload-new-pb-data"]);
+    uploadPB($user->id, $_FILES["upload-new-pb"], $_POST["upload-new-pb-data"]);
+    header("Location: " . $_SERVER["PHP_SELF"]);
 }
 if ($uploadstatus) {
     header("Location: " . $rootpath . "index.php?logout=true");
@@ -67,7 +68,7 @@ include "navbar.php";
             <img id="profile-pic" src="<?php echo $rootpath . "assets/img/profilepictures/" . $user->profilepicture; ?>" alt="Avatar" class="avatar" draggable="false" onerror="this.src = '<?php echo $rootpath ?>assets/img/profilepictures/defaultpb.jpg">
             <button class="upload-pb-select-picture" type="button" onclick="document.getElementById('pb-upload-hidden').click();"><i class="fas fa-pencil-alt"></i> Bearbeiten</button>
             <form action="" method="POST" id="upload-new-pb-form" enctype="multipart/form-data">
-                <input type="file" name="upload-new-pb" id="pb-upload-hidden" onchange="loadPreviewPB();" accept="image/*">
+                <input type="file" name="upload-new-pb" id="pb-upload-hidden" onchange="loadPreviewPB();" accept="image/png, image/jpeg, image/gif">
                 <input type="hidden" name="upload-new-pb-data" id="pb-upload-data">
             </form>
             <p style="display: inline;" class="use-user-name"><?php echo $user->username; ?></p>

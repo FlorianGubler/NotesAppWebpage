@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE); //Dont print out Warnings
+//error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE); //Dont print out Warnings
 
 function GetNextIDFromUsers()
 {
@@ -598,10 +598,22 @@ function uploadPB($userid, $uploadpbfile, $uploadpbdata)
 
             //Crop Image
             $image_data = json_decode($uploadpbdata);
-            $source = imagecreatefromjpeg($target_file);
-            $im2 = imagecrop($source, ['x' => $image_data->x, 'y' => $image_data->y, 'width' => $image_data->width, 'height' => $image_data->height]);
-
-            imagejpeg($im2, $target_file);
+            if (exif_imagetype($target_file) == IMAGETYPE_JPEG) {
+                $source = imagecreatefromjpeg($target_file);
+                $im2 = imagecrop($source, ['x' => $image_data->x, 'y' => $image_data->y, 'width' => $image_data->width, 'height' => $image_data->height]);
+                imagejpeg($im2, $target_file);
+            } else if (exif_imagetype($target_file) == IMAGETYPE_GIF) {
+                //Only 1. Frame will be croped and safed
+                $source = imagecreatefromgif($target_file);
+                $im2 = imagecrop($source, ['x' => $image_data->x, 'y' => $image_data->y, 'width' => $image_data->width, 'height' => $image_data->height]);
+                imagegif($im2, $target_file);
+            } else if (exif_imagetype($target_file) == IMAGETYPE_PNG) {
+                $source = imagecreatefrompng($target_file);
+                $im2 = imagecrop($source, ['x' => $image_data->x, 'y' => $image_data->y, 'width' => $image_data->width, 'height' => $image_data->height]);
+                imagepng($im2, $target_file);
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
