@@ -106,7 +106,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 </ul>
                 <div class="tables">
                     <?php
-                    if(count($notes) == 0){
+                    if (count($notes) == 0) {
                         echo "<div class='notes-nothing-found'>Es wurden hier noch keine Noten eingetragen</div>";
                     }
                     foreach ($notessemester as $semester => $semesternotes) {
@@ -205,7 +205,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
 
                 </div>
             </div>
-            <div class="school-content" id="LAP">
+            <div class="school-content" id="IPA">
                 <?php
                 $notes = getNotes($user->id);
                 $subjects = getSubjects();
@@ -214,7 +214,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 $endnotes = array();
                 $endnotes["endnote"] = 0;
                 foreach ($subjects as $subject) {
-                    if ($subject->schoolName == "LAP") {
+                    if ($subject->schoolName == "IPA") {
                         if (!isset($notesbytag[$subject->additionalTag])) {
                             $notesbytag[$subject->additionalTag] = array();
                         }
@@ -223,7 +223,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                             $endnotes[$subject->additionalTag]["endnote"] = 0;
                         }
                         foreach ($notes as $note) {
-                            if ($note->schoolName == "LAP" && $note->subjectName == $subject->subjectName) {
+                            if ($note->schoolName == "IPA" && $note->subjectName == $subject->subjectName) {
                                 if (!isset($notesbytag[$note->additionalTag][$note->subjectName])) {
                                     $notesbytag[$note->additionalTag][$note->subjectName] = array();
                                 }
@@ -253,7 +253,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                     <div id="tables">
                         <div class="tables-container">
                             <?php
-                            if(count($notes) == 0){
+                            if (count($notes) == 0) {
                                 echo "<div class='notes-nothing-found'>Es wurden hier noch keine Noten eingetragen</div>";
                             }
                             foreach ($notesbytag as $currtag => $tagsubjects) {
@@ -334,7 +334,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                                 } else if ($endnotes["endnote"] < 4 && $endnotes["endnote"] != 0) {
                                     $notestateclass = "grade-bad";
                                 }
-                                echo "<tr><th>Endnote LAP: </th><td class='$notestateclass'>" . $endnotes["endnote"] . "</td></tr>";
+                                echo "<tr><th>Endnote IPA: </th><td class='$notestateclass'>" . $endnotes["endnote"] . "</td></tr>";
                                 ?>
                             </table>
                         </div>

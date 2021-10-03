@@ -120,7 +120,7 @@ foreach ($subjects as $subject) {
                 </select>
                 <div class="admin-create-input-containers">
                     <label for="create-subject-addtionaltag-input">Additional Tag</label>
-                    <input id="create-subject-addtionaltag-input" placeholder="LAP" name="additionaltag" list="additionaltags">
+                    <input id="create-subject-addtionaltag-input" placeholder="ÜK Module" name="additionaltag" list="additionaltags">
                     <datalist id="additionaltags">
                         <?php
                         foreach ($additionalTags as $additionalTag) {

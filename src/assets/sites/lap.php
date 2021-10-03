@@ -7,7 +7,7 @@ $notesbytag = array();
 $endnotes = array();
 $endnotes["endnote"] = 0;
 foreach ($subjects as $subject) {
-    if ($subject->schoolName == "LAP") {
+    if ($subject->schoolName == "IPA") {
         if (!isset($notesbytag[$subject->additionalTag])) {
             $notesbytag[$subject->additionalTag] = array();
         }
@@ -16,7 +16,7 @@ foreach ($subjects as $subject) {
             $endnotes[$subject->additionalTag]["endnote"] = 0;
         }
         foreach ($notes as $note) {
-            if ($note->schoolName == "LAP" && $note->subjectName == $subject->subjectName) {
+            if ($note->schoolName == "IPA" && $note->subjectName == $subject->subjectName) {
                 if (!isset($notesbytag[$note->additionalTag][$note->subjectName])) {
                     $notesbytag[$note->additionalTag][$note->subjectName] = array();
                 }
@@ -129,7 +129,7 @@ foreach ($subjects as $subject) {
                 } else if ($endnotes["endnote"] < 4 && $endnotes["endnote"] != 0) {
                     $notestateclass = "grade-bad";
                 }
-                echo "<tr><th>Endnote LAP: </th><td class='$notestateclass'>" . $endnotes["endnote"] . "</td></tr>";
+                echo "<tr><th>Endnote IPA: </th><td class='$notestateclass'>" . $endnotes["endnote"] . "</td></tr>";
                 ?>
             </table>
         </div>

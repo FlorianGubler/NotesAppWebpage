@@ -59,7 +59,7 @@ if (isset($_POST["upload-note"])) {
 </div>
 <script>
   function checkInput() {
-    if (document.querySelector('#select-subject option:checked').parentElement.label == "LAP") {
+    if (document.querySelector('#select-subject option:checked').parentElement.label == "IPA") {
       document.getElementById("select-semester").style.display = "none";
     } else {
       document.getElementById("select-semester").style.display = "block";

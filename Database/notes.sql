@@ -96,7 +96,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON root.schools TO usr;
 
 INSERT ALL
 INTO  root.schools  ( id ,  schoolName ) VALUES (1, 'BMS')
-INTO  root.schools  ( id ,  schoolName ) VALUES (2, 'LAP')
+INTO  root.schools  ( id ,  schoolName ) VALUES (2, 'IPA')
 SELECT 1 FROM DUAL;
 
 -- --------------------------------------------------------
@@ -266,7 +266,7 @@ ALTER TABLE root.semesters
 -- Indizes für die Tabelle  session_links
 --
 ALTER TABLE root.session_links
-  ADD PRIMARY KEY ( id  )
+  ADD PRIMARY KEY ( id  );
 
 --
 -- Indizes für die Tabelle  stickynotes

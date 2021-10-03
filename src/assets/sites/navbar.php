@@ -57,7 +57,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a id="bms-anchor" href="bms.php"><i class="fas fa-graduation-cap"></i> BMS Notenstand</a></li>
-            <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
+            <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> IPA Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
             <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>
             <?php
@@ -91,13 +91,13 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
 
             <label>Sharelink</label>
             <div class="share-values-container">
-                <a id="share-link" target="_blank">Link</a>
+                <a id="share-link" target="_blank">...</a>
                 <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-link').href);"><i class="fas fa-copy"></i></button>
             </div>
 
             <label>Token</label>
             <div class="share-values-container">
-                <p id="share-token">Token</p>
+                <p id="share-token">...</p>
                 <button class="share-copy-btn" onclick="copySmth(document.getElementById('share-token').innerHTML);"><i class="fas fa-copy"></i></button>
             </div>
         </div>
@@ -137,10 +137,9 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
             xhttp.open("GET", "<?php echo $_SERVER["PHP_SELF"]; ?>?action=renewsharelink");
             xhttp.send();
         }
-        renewSharelink(document.getElementById("renew-share-link"));
 
         async function showNewShareLink(response) {
-            LINK_MAX_LENGTH = 37;
+            LINK_MAX_LENGTH = 34;
             await sleep(2000);
             full_link = "<?php echo $rootpath; ?>share.php?link=" + response.link;
             document.getElementById("share-link").innerHTML = full_link.slice(0, LINK_MAX_LENGTH) + "...";
