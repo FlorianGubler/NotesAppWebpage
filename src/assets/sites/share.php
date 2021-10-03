@@ -26,8 +26,9 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sharing</title>
+    <title>Share Noten von <?php echo $user->username; ?></title>
     <link rel="shortcut icon" type="image/x-icon" href="../img/icon.ico">
+    <script src="<?php echo $rootpath; ?>assets/js/fontawesome/all.js"></script>
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/navbar.css">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/share.css">
     <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/bms.css">
@@ -47,6 +48,7 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
             </form>
         </div>
     <?php } else { ?>
+        <h1 class="site-title">Share Noten von <?php echo $user->username; ?></h1>
         <div class="navigation">
             <?php
             foreach ($schools as $school) {
@@ -93,7 +95,6 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 ?>
                 <div id="top-bar-gui">
                     <h1 id="title-home">BMS Notentabelle</h1>
-                    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
                 </div>
                 <ul id="semesters">
                     <?php
@@ -105,6 +106,9 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 </ul>
                 <div class="tables">
                     <?php
+                    if(count($notes) == 0){
+                        echo "<div class='notes-nothing-found'>Es wurden hier noch keine Noten eingetragen</div>";
+                    }
                     foreach ($notessemester as $semester => $semesternotes) {
                         $semesterid = urlencode(strtolower(str_replace(' ', '_', $semester)));
                         echo "<div class='semester-content' id='$semesterid'>";
@@ -234,7 +238,6 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                 ?>
                 <div id="top-bar-gui">
                     <h1 id="title-home">IPA Noten</h1>
-                    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
                 </div>
                 <ul id="semesters">
                     <?php
@@ -250,6 +253,9 @@ if (isset($_POST['submit_token']) && isset($_POST['token']) && isset($_GET['link
                     <div id="tables">
                         <div class="tables-container">
                             <?php
+                            if(count($notes) == 0){
+                                echo "<div class='notes-nothing-found'>Es wurden hier noch keine Noten eingetragen</div>";
+                            }
                             foreach ($notesbytag as $currtag => $tagsubjects) {
                                 $currtagid = urlencode(strtolower(str_replace(' ', '_', $currtag)));
                                 echo "<div class='semester-content' id='$currtagid'>";

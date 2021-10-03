@@ -1,6 +1,14 @@
 :root{
     --hlsRot: #9a0941;
 }
+h1.site-title{
+    font-size: large;
+    padding: 5px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: transparent;
+}
 .navigation{
     width: calc(100% - 10px);
     display: flex;

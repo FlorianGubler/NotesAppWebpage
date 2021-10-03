@@ -51,8 +51,8 @@ function checkifOverSubjectsExist($subjectname)
 </ul>
 <div id="tables">
     <?php
-    if(count($notes) == 0){
-        echo "<div class='notes-nothing-found'>Hier ist noch nichts, füge neue Noten über das Plus oben links hinzu</div>";
+    if (count($notes) == 0) {
+        echo "<div class='notes-nothing-found' style='width:100%;'>Hier ist noch nichts, füge neue Noten über das Plus oben links hinzu</div>";
     }
     foreach ($notessemester as $semester => $semesternotes) {
         $semesterid = urlencode(strtolower(str_replace(' ', '_', $semester)));
