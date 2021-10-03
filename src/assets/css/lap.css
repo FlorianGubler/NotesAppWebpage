@@ -5,12 +5,20 @@
 td, th{
     text-align: center;
 }
-#edit-table{
-    display: inline;
-    padding: 5px;
-    border-radius: 5px;
+.notes-nothing-found{
+    color: #52575c;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
 }
-#edit-table:hover{
+#edit-table{
+    padding: 5px;
+    padding-left: 30px;
+    border-left: 1px solid rgba(128, 128, 128, 0.596);
+}
+#edit-table svg:hover{
     opacity: 0.6;
 }
 #edit-table path{

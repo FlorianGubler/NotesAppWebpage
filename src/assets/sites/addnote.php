@@ -53,7 +53,7 @@ if (isset($_POST["upload-note"])) {
     </div>
 
     <div class="container footer-container">
-      <span class="psw"><a href="mailto:gubler.florian@gmx.net">Probleme beim hochladen?</a></span>
+      <span class="psw"><a href="mailto:florian.gubler@helsana.ch">Probleme beim hochladen?</a></span>
     </div>
   </form>
 </div>

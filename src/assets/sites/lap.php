@@ -32,7 +32,7 @@ foreach ($subjects as $subject) {
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/lap.css">
 <div id="top-bar-gui">
     <h1 id="title-home">IPA Noten</h1>
-    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
+    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="fas fa-plus"></i></a>
 </div>
 <ul id="semesters">
     <?php
@@ -48,6 +48,9 @@ foreach ($subjects as $subject) {
     <div id="tables">
         <div class="tables-container">
             <?php
+            if(count($notes) == 0){
+                echo "<div class='notes-nothing-found'>Hier ist noch nichts, füge neue Noten über das Plus oben links hinzu</div>";
+            }
             foreach ($notesbytag as $currtag => $tagsubjects) {
                 $currtagid = urlencode(strtolower(str_replace(' ', '_', $currtag)));
                 echo "<div class='semester-content' id='$currtagid'>";

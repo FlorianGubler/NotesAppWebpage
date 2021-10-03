@@ -74,6 +74,19 @@ include "navbar.php";
             <p style="display: inline; opacity: 0.5; font-size: x-small; padding-top: 0px;" class="use-user-email"><?php echo $user->email; ?></p>
         </div>
         <div class="container">
+            <?php
+            if (isset($uploadstatus)) {
+                if (!$uploadstatus) {
+            ?>
+                    <p class='upload-response-message upload-false'>Sorry, etwas hat nicht geklappt, bei widerholtem Auftreten kontaktiere bitte einen Admin</p>
+                <?php
+                } else {
+                ?>
+                    <p class='upload-response-message upload-true'>Neue Daten erfolgreich gespeichert</p>
+            <?php
+                }
+            }
+            ?>
             <form id="newusername" class="newuserinput" action="" method="POST">
                 <label>Neuer Benutzername</label>
                 <input id="getnewusername" name="newusername" placeholder="Benutzername" required>
@@ -93,23 +106,6 @@ include "navbar.php";
                 <input type="password" id="getoldpassword" name="oldpassword" placeholder="Altes Passwort" required>
                 <button type="submit" name="submit-paswd">Neues Passwort Speichern</button>
             </form>
-            <?php
-            if (isset($uploadstatus)) {
-                if ($uploadstatus) {
-            ?>
-                    <p style='background-color: red;display: none;' id='login-response-false'>Etwas hat nicht geklappt</p>
-                <?php
-                } else {
-                ?>
-                    <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
-                <?php
-                }
-            } else {
-                ?>
-                <p style='background-color: green;display: none;' id='login-response-true'>Neue Daten erfolgreich gespeichert</p>
-            <?php
-            }
-            ?>
         </div>
 
         <div class="container footer-container" style="background-color:#404142">

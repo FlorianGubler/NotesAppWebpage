@@ -312,5 +312,12 @@ ALTER TABLE root.subjects
   ADD CONSTRAINT  subjects_ibfk_1  FOREIGN KEY ( FK_school ) REFERENCES  root.schools  ( id  )
   ADD CONSTRAINT  subjects_ibfk_2  FOREIGN KEY ( FK_overSubject ) REFERENCES   root.subjects ( id );
 
+--
+-- Constraints der Tabelle Users
+--
+ALTER TABLE root.users
+  ADD CONSTRAINT useremail_unique UNIQUE (email);
 
+
+-- Commit Changes
 COMMIT;

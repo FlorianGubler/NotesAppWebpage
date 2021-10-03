@@ -39,7 +39,7 @@ function checkifOverSubjectsExist($subjectname)
 <link rel="stylesheet" href="<?php echo $rootpath; ?>assets/css/bms.css">
 <div id="top-bar-gui">
     <h1 id="title-home">BMS Notentabelle</h1>
-    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="far fa-edit"></i></a>
+    <a href="<?php echo $rootpath; ?>assets/sites/addnote.php" id="edit-table"><i class="fas fa-plus"></i></a>
 </div>
 <ul id="semesters">
     <?php
@@ -51,6 +51,9 @@ function checkifOverSubjectsExist($subjectname)
 </ul>
 <div id="tables">
     <?php
+    if(count($notes) == 0){
+        echo "<div class='notes-nothing-found'>Hier ist noch nichts, füge neue Noten über das Plus oben links hinzu</div>";
+    }
     foreach ($notessemester as $semester => $semesternotes) {
         $semesterid = urlencode(strtolower(str_replace(' ', '_', $semester)));
         echo "<div class='semester-content' id='$semesterid'>";

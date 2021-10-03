@@ -2,12 +2,16 @@
 include "../../config.php";
 $passwordfalse = false;
 $formfalse = false;
+$serverfalse = false;
 
 if (isset($_POST['submit-register'])) {
     if (!empty($_POST['new-password']) || !empty($_POST['fname']) || !empty($_POST['lname']) || !empty($_POST['email'])) {
         if ($_POST['new-password'] == $_POST['new-password-check']) {
-            createUser($_POST['fname'] . " " . $_POST['lname'], $_POST['email'], $_POST['new-password']);
-            header("Location: ../../index.php");
+            if (createUser($_POST['fname'] . " " . $_POST['lname'], $_POST['email'], $_POST['new-password'])) {
+                header("Location: ../../index.php");
+            } else {
+                $serverfalse = true;
+            }
         } else {
             $passwordfalse = true;
         }
@@ -45,6 +49,9 @@ if (isset($_POST['submit-register'])) {
         }
         if ($passwordfalse) {
             echo "<h6 style='color: red;'>* Paasswörter stimmen nicht überein</h6>";
+        }
+        if ($serverfalse) {
+            echo "<h6 style='color: red;'>* Etwas hat nicht geklappt, falls dies wiederholt passiert, kontaktiere bitten einen Admin</h6>";
         }
         ?>
         <button type="submit" name="submit-register">Registrieren</button>

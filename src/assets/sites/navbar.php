@@ -56,7 +56,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "renewsharelink") {
         <div id="menu-splitline"></div>
         <ul>
             <li><a id="home-anchor" href="home.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a id="bms-anchor" href="bms.php"><i class="fas fa-school"></i> BMS Notenstand</a></li>
+            <li><a id="bms-anchor" href="bms.php"><i class="fas fa-graduation-cap"></i> BMS Notenstand</a></li>
             <li><a id="lap-anchor" href="lap.php#berufsfachschule_module"><i class="fas fa-chalkboard-teacher"></i> LAP Notenstand</a></li>
             <li><a id="addnote-anchor" href="addnote.php"><i class="far fa-plus-square"></i> Noten hinzufügen</a></li>
             <li><a id="addnote-anchor" href="stickynotes.php"><i class="far fa-comment-alt"></i> Sticky Notes</a></li>

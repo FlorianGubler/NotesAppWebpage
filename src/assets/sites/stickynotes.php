@@ -60,7 +60,7 @@ $stickynotes = getStickyNotes($user->id);
         </div>
         <button id="autosave-off-save-editor" onclick="saveStickyNote(this.name);">Speichern</button>
         <div class="set-autosave-container">
-            <input type="checkbox" id="set-autosave" onchange="set_autosave(this);" checked><label for="set-autosave">Auto Save</label>
+            <input type="checkbox" id="set-autosave" onchange="set_autosave(this);" checked><label for="set-autosave">Auto Speichern</label>
         </div>
     </div>
 </div>

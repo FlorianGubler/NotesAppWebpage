@@ -247,15 +247,6 @@ span.psw {
 #big-image-resize{
   font-size: larger;
 }
-
-#login-response-false, #login-response-true{
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    color: rgb(201, 201, 201);
-    font-size: 15px;
-}
-
 #splitline{
   padding-left: 0;
   width: 100vw;
@@ -288,4 +279,19 @@ span.psw {
   left: 101%;
   top: 0;
   z-index: 100;
+}
+.upload-response-message{
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: small;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+.upload-response-message.upload-false{
+  background-color: red;
+}
+.upload-response-message.upload-true{
+  background-color: green;
 }
